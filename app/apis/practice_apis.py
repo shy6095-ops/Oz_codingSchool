@@ -80,14 +80,14 @@ class UserCreate(BaseModel):
     @classmethod
     def validate_email(cls, value: str):
         if not EMAIL_RE.fullmatch(value):
-            raise ValueError("올바른 이메일 형식이 아닙니다.")
+            raise HTTPException("올바른 이메일 형식이 아닙니다.")
         return value
 
     @field_validator("password")
     @classmethod
     def validate_password(cls, value: str):
         if not PASSWORD_RE.fullmatch(value):
-            raise ValueError("비밀번호 형식이 올바르지 않습니다.")
+            raise HTTPException("비밀번호 형식이 올바르지 않습니다.")
         return value
 
 
@@ -101,14 +101,14 @@ class UserUpdate(BaseModel):
     @classmethod
     def validate_email(cls, value: str | None):
         if value is not None and not EMAIL_RE.fullmatch(value):
-            raise ValueError("올바른 이메일 형식이 아닙니다.")
+            raise HTTPException("올바른 이메일 형식이 아닙니다.")
         return value
 
     @field_validator("password")
     @classmethod
     def validate_password(cls, value: str | None):
         if value is not None and not PASSWORD_RE.fullmatch(value):
-            raise ValueError("비밀번호 형식이 올바르지 않습니다.")
+            raise HTTPException("비밀번호 형식이 올바르지 않습니다.")
         return value
 
 
