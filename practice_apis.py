@@ -1,21 +1,48 @@
+import re
+
 from fastapi import APIRouter, HTTPException, status
-from pydantic import BaseModel, Field
+from pydantic import BaseModel, Field, model_validator
 
 
 router = APIRouter()
 
 
 class UserCreate(BaseModel):
-	id: int
-	name: str
-	age: int = Field(ge=0)
-	email: str
-	password: str
+	name: str = Field(min_length=2, max_length=10)
+	age: int = Field(ge=14)
+	email: str = Field(max_length=30)
+	password: str = Field(min_length=8, max_length=20)
+
+	@model_validator(mode="after")
+	def validate_user(self):
+		validate_email(self.email)
+		validate_password(self.password)
+		return self
 
 
 class UserUpdate(BaseModel):
-	age: int = Field(ge=0)
-	email: str
+	name: str | None = Field(default=None, min_length=2, max_length=10)
+	age: int | None = Field(default=None, ge=14)
+	email: str | None = Field(default=None, max_length=30)
+	password: str | None = Field(default=None, min_length=8, max_length=20)
+
+	@model_validator(mode="after")
+	def validate_update(self):
+		if self.email is not None:
+			validate_email(self.email)
+		if self.password is not None:
+			validate_password(self.password)
+		return self
+
+
+def validate_email(email: str):
+	if not re.fullmatch(r"[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}", email):
+		raise ValueError("올바른 이메일 형식이 아닙니다.")
+
+
+def validate_password(password: str):
+	if not re.fullmatch(r"(?=.*[a-z])(?=.*[A-Z])(?=.*[^A-Za-z0-9]).*", password):
+		raise ValueError("비밀번호는 대문자, 소문자, 특수문자를 각각 하나 이상 포함해야 합니다.")
 
 
 user_list = [
@@ -59,10 +86,11 @@ async def get_user(user_id: int):
 
 @router.post("", response_model=dict, status_code=status.HTTP_201_CREATED)
 async def create_user(user: UserCreate):
-	if any(existing_user["id"] == user.id for existing_user in user_list):
-		raise HTTPException(status_code=status.HTTP_409_CONFLICT, detail="이미 존재하는 회원 ID입니다.")
+	if any(existing_user["email"] == user.email for existing_user in user_list):
+		raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="이미 사용 중인 이메일입니다.")
 
 	new_user = user.model_dump()
+	new_user["id"] = max(existing_user["id"] for existing_user in user_list) + 1
 	user_list.append(new_user)
 	return new_user
 
@@ -71,7 +99,18 @@ async def create_user(user: UserCreate):
 async def update_user(user_id: int, user_update: UserUpdate):
 	for user in user_list:
 		if user["id"] == user_id:
-			user.update(user_update.model_dump())
+			changes = user_update.model_dump(exclude_unset=True)
+			if not changes or any(value is None for value in changes.values()):
+				raise HTTPException(
+					status_code=status.HTTP_400_BAD_REQUEST,
+					detail="수정할 항목을 하나 이상 입력해야 합니다.",
+				)
+			if "email" in changes and any(
+				existing_user["id"] != user_id and existing_user["email"] == changes["email"]
+				for existing_user in user_list
+			):
+				raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="이미 사용 중인 이메일입니다.")
+			user.update(changes)
 			return user
 
 	raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="회원을 찾을 수 없습니다.")
@@ -84,4 +123,3 @@ async def delete_user(user_id: int):
 			return user_list.pop(index)
 
 	raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="회원을 찾을 수 없습니다.")
-
