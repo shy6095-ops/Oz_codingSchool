@@ -43,3 +43,6 @@ async def catch_all(path: str):
 
         raise HTTPException(status_code=404)
     return FileResponse(BASE_DIR / "static" / "index.html")
+# practice API 라우터 등록
+from app.apis.practice_apis import router as practice_router
+app.include_router(practice_router)
