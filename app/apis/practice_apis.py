@@ -47,7 +47,10 @@ def get_user(user_id: int) -> dict:
     user = next((user for user in user_list if user["id"] == user_id), None)
 
     if user is None:
-        raise HTTPException(404, "존재하지 않는 회원입니다.")
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail="존재하지 않는 회원입니다.",
+        )
 
     return user
 
@@ -58,7 +61,10 @@ def check_email(email: str, current_id: int | None = None):
         user["email"] == email and user["id"] != current_id
         for user in user_list
     ):
-        raise HTTPException(409, "이미 사용 중인 이메일입니다.")
+        raise HTTPException(
+            status_code=status.HTTP_409_CONFLICT,
+            detail="이미 사용 중인 이메일입니다.",
+        )
 
 
 class UserResponse(BaseModel):
@@ -80,14 +86,20 @@ class UserCreate(BaseModel):
     @classmethod
     def validate_email(cls, value: str):
         if not EMAIL_RE.fullmatch(value):
-            raise HTTPException("올바른 이메일 형식이 아닙니다.")
+            raise HTTPException(
+                status_code=status.HTTP_400_BAD_REQUEST,
+                detail="올바른 이메일 형식이 아닙니다.",
+            )
         return value
 
     @field_validator("password")
     @classmethod
     def validate_password(cls, value: str):
         if not PASSWORD_RE.fullmatch(value):
-            raise HTTPException("비밀번호 형식이 올바르지 않습니다.")
+            raise HTTPException(
+                status_code=status.HTTP_400_BAD_REQUEST,
+                detail="비밀번호 형식이 올바르지 않습니다.",
+            )
         return value
 
 
@@ -101,14 +113,20 @@ class UserUpdate(BaseModel):
     @classmethod
     def validate_email(cls, value: str | None):
         if value is not None and not EMAIL_RE.fullmatch(value):
-            raise HTTPException("올바른 이메일 형식이 아닙니다.")
+            raise HTTPException(
+                status_code=status.HTTP_400_BAD_REQUEST,
+                detail="올바른 이메일 형식이 아닙니다.",
+            )
         return value
 
     @field_validator("password")
     @classmethod
     def validate_password(cls, value: str | None):
         if value is not None and not PASSWORD_RE.fullmatch(value):
-            raise HTTPException("비밀번호 형식이 올바르지 않습니다.")
+            raise HTTPException(
+                status_code=status.HTTP_400_BAD_REQUEST,
+                detail="비밀번호 형식이 올바르지 않습니다.",
+            )
         return value
 
 
@@ -162,7 +180,10 @@ def update_user(user_id: int, data: UserUpdate):
     updates = data.model_dump(exclude_none=True)
 
     if not updates:
-        raise HTTPException(400, "수정할 항목을 하나 이상 입력해야 합니다.")
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="수정할 항목을 하나 이상 입력해야 합니다.",
+        )
 
     if "email" in updates:
         check_email(updates["email"], user_id)
