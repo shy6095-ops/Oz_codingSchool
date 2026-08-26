@@ -53,7 +53,7 @@ def upgrade() -> None:
         sa.Column("name", sa.String(length=30), nullable=False),
         sa.Column("age", sa.SmallInteger(), nullable=False),
         sa.Column("gender", gender_enum, nullable=False),
-        sa.Column("phone", sa.String(length=11), nullable=False),
+        sa.Column("phone", sa.String(length=20), nullable=False),
         sa.Column(
             "created_at",
             sa.DateTime(),

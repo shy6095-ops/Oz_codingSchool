@@ -13,7 +13,7 @@ class Patient(TimestampMixin, Base):
     name: Mapped[str] = mapped_column(String(30), nullable=False)
     age: Mapped[int] = mapped_column(SmallInteger, nullable=False)
     gender: Mapped[Gender] = mapped_column(nullable=False)
-    phone: Mapped[str] = mapped_column(String(11), nullable=False)
+    phone: Mapped[str] = mapped_column(String(20), nullable=False)
 
     medical_records: Mapped[list["MedicalRecord"]] = relationship(
         back_populates="patient"
