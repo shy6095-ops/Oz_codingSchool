@@ -28,10 +28,10 @@ class User(TimestampMixin, Base):
     __tablename__ = "users"
 
     id: Mapped[int] = mapped_column(Integer, primary_key=True, autoincrement=True)
-    email: Mapped[str | None] = mapped_column(String(255), unique=True)
-    hashed_password: Mapped[str | None] = mapped_column(String(255))
-    name: Mapped[str | None] = mapped_column(String(20))
-    phone_number: Mapped[str | None] = mapped_column(String(20), unique=True)
+    email: Mapped[str] = mapped_column(String(255), unique=True, nullable=False)
+    hashed_password: Mapped[str] = mapped_column(String(255), nullable=False)
+    name: Mapped[str] = mapped_column(String(20), nullable=False)
+    phone_number: Mapped[str] = mapped_column(String(20), unique=True, nullable=False)
     gender: Mapped[Gender] = mapped_column(SqlEnum(Gender, name="gender"), nullable=False)
     department: Mapped[Department] = mapped_column(
         SqlEnum(Department, name="department"), nullable=False
