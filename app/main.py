@@ -46,3 +46,7 @@ async def catch_all(path: str):
 # practice API 라우터 등록
 from app.apis.practice_apis import router as practice_router
 app.include_router(practice_router)
+
+# USER API 라우터 등록          ← 여기부터 추가
+from app.apis.user_router import router as user_router
+app.include_router(user_router)
