@@ -4,9 +4,12 @@ from pathlib import Path
 from fastapi import FastAPI
 from starlette.staticfiles import StaticFiles
 from starlette.responses import FileResponse
+from app.apis import practice_apis
+from app.apis.user_router import router as user_router
 
 app = FastAPI()
-
+app.include_router(practice_apis.router)
+app.include_router(user_router)
 BASE_DIR = Path(__file__).resolve().parent.parent
 
 # 만약 static, media 폴더가 존재하지 않으면 생성
@@ -43,10 +46,3 @@ async def catch_all(path: str):
 
         raise HTTPException(status_code=404)
     return FileResponse(BASE_DIR / "static" / "index.html")
-# practice API 라우터 등록
-from app.apis.practice_apis import router as practice_router
-app.include_router(practice_router)
-
-# USER API 라우터 등록          ← 여기부터 추가
-from app.apis.user_router import router as user_router
-app.include_router(user_router)
