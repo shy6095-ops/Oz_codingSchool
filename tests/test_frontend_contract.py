@@ -9,7 +9,7 @@ def test_user_templates_have_password_visibility_controls():
 
 
 def test_documentation_covers_refresh_cookie():
-    documentation = Path("docs/api/user-api.md").read_text()
+    documentation = Path("docs/api/4일차_USER_API_설계.md").read_text()
 
     assert "HttpOnly" in documentation
     assert "/api/v1/users/refresh" in documentation

@@ -24,3 +24,4 @@ envs/
 
 # Local SQLite runtime data
 db/*.db
+db/*.db-*
