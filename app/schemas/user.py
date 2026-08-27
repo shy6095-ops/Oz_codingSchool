@@ -2,11 +2,16 @@ from datetime import datetime
 
 from pydantic import BaseModel, ConfigDict, EmailStr, Field, field_validator
 
+from app.models.user import Department, Gender, Role
+
 
 class UserCreate(BaseModel):
     email: EmailStr
     password: str = Field(min_length=8, max_length=128)
-    name: str = Field(min_length=1, max_length=50)
+    name: str = Field(min_length=1, max_length=20)
+    phone_number: str = Field(min_length=1, max_length=20)
+    gender: Gender
+    department: Department
 
     @field_validator("name")
     @classmethod
@@ -18,7 +23,7 @@ class UserCreate(BaseModel):
 
 
 class UserUpdate(BaseModel):
-    name: str | None = Field(default=None, min_length=1, max_length=50)
+    name: str | None = Field(default=None, min_length=1, max_length=20)
     password: str | None = Field(default=None, min_length=8, max_length=128)
 
     @field_validator("name")
@@ -38,8 +43,13 @@ class UserResponse(BaseModel):
     id: int
     email: EmailStr
     name: str
+    phone_number: str
+    gender: Gender
+    department: Department
+    role: Role
+    is_active: bool
     created_at: datetime
-    updated_at: datetime
+    updated_at: datetime | None
 
 
 class UserUpdateResponse(BaseModel):
@@ -48,4 +58,8 @@ class UserUpdateResponse(BaseModel):
     id: int
     email: EmailStr
     name: str
-    updated_at: datetime
+    phone_number: str
+    gender: Gender
+    department: Department
+    role: Role
+    updated_at: datetime | None

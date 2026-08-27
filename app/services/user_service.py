@@ -19,8 +19,11 @@ class UserService:
         try:
             user = await self.repository.create(
                 email=str(payload.email),
-                password_hash=hash_password(payload.password),
+                hashed_password=hash_password(payload.password),
                 name=payload.name,
+                phone_number=payload.phone_number,
+                gender=payload.gender,
+                department=payload.department,
             )
             await self.repository.db.commit()
             return user
@@ -36,13 +39,12 @@ class UserService:
         if payload.name is not None:
             user.name = payload.name
         if payload.password is not None:
-            user.password_hash = hash_password(payload.password)
+            user.hashed_password = hash_password(payload.password)
         user.updated_at = datetime.now(UTC)
         user = await self.repository.save(user)
         await self.repository.db.commit()
         return user
 
     async def delete_user(self, user: User) -> None:
-        user.is_deleted = True
-        user.deleted_at = datetime.now(UTC)
+        user.is_active = False
         await self.repository.db.commit()
