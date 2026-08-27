@@ -8,6 +8,10 @@ class Settings(BaseSettings):
     DB_PORT: str = "3306"
     DB_NAME: str = "ai_health"
 
+  # JWT 설정 (추가)
+    SECRET_KEY: str = "change-me-in-env"
+    ALGORITHM: str = "HS256"
+
     model_config = {
         "env_file": ".env",
         "extra": "ignore"
