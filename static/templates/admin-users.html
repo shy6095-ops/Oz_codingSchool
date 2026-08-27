@@ -7,21 +7,32 @@
         <input type="text" id="admin-search-query" placeholder="이름 또는 이메일 검색" style="flex: 1; min-width: 200px;" onkeypress="if(event.key === 'Enter') pages.handleAdminSearch()">
         <select id="admin-filter-dept" style="width: 150px;" onchange="pages.handleAdminSearch()">
             <option value="">부서 전체</option>
-            <option value="developer">개발자</option>
-            <option value="medical team">의료진</option>
-            <option value="researcher">연구진</option>
+            <option value="DEV">개발</option>
+            <option value="MEDICAL">의료</option>
+            <option value="RESEARCH">연구</option>
         </select>
         <button onclick="pages.handleAdminSearch()">검색</button>
         <button class="secondary" onclick="pages.resetAdminSearch()">초기화</button>
     </div>
 
+    <div class="role-bulk-actions">
+        <select id="admin-role-select" aria-label="변경할 권한">
+            <option value="PENDING">대기자</option>
+            <option value="STAFF">스태프</option>
+            <option value="ADMIN">어드민</option>
+        </select>
+        <button onclick="pages.handleSelectedRoleUpdate()">선택 회원 권한 변경</button>
+    </div>
+
     <table>
         <thead>
             <tr>
+                <th><input type="checkbox" aria-label="전체 선택" onchange="pages.toggleAdminSelection(this)"></th>
                 <th>ID</th>
                 <th>이름</th>
                 <th>이메일</th>
                 <th>부서</th>
+                <th>성별</th>
                 <th>전화번호</th>
                 <th>권한</th>
                 <th>상태</th>

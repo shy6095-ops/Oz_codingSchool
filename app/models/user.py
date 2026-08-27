@@ -36,9 +36,17 @@ class User(TimestampMixin, Base):
     department: Mapped[Department] = mapped_column(
         SqlEnum(Department, name="department"), nullable=False
     )
-    role: Mapped[Role] = mapped_column(SqlEnum(Role, name="role"), nullable=False)
+    role: Mapped[Role] = mapped_column(
+        SqlEnum(Role, name="role"), nullable=False, default=Role.PENDING
+    )
     is_active: Mapped[bool] = mapped_column(Boolean, nullable=False, default=True)
 
     uploaded_xray_images: Mapped[list["XrayImage"]] = relationship(
-        back_populates="uploader"
+        back_populates="uploader", cascade="all, delete-orphan", passive_deletes=True
+    )
+    refresh_sessions: Mapped[list["RefreshSession"]] = relationship(
+        back_populates="user", cascade="all, delete-orphan", passive_deletes=True
+    )
+    revoked_access_tokens: Mapped[list["RevokedAccessToken"]] = relationship(
+        back_populates="user", cascade="all, delete-orphan", passive_deletes=True
     )

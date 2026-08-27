@@ -22,7 +22,7 @@ async function login(email, password) {
             localStorage.setItem('isLoggedIn', 'true');
             await checkAuth();
             
-            if (state.user && state.user.role === 'pending') {
+            if (state.user && state.user.role === 'PENDING') {
                 navigate('/');
             } else {
                 navigate('/patients');
@@ -95,15 +95,16 @@ function updateNav() {
     
     if (state.user) {
         document.body.classList.add('logged-in');
+        const departmentLabel = { DEV: '개발', MEDICAL: '의료', RESEARCH: '연구' }[state.user.department] || state.user.department;
         
-        if (state.user.role === 'admin') {
+        if (state.user.role === 'ADMIN') {
             adminLinkContainer.innerHTML = `<li><a href="/admin/users" onclick="route(event)" class="nav-btn">회원 관리</a></li>`;
         } else {
             adminLinkContainer.innerHTML = '';
         }
         
         authLink.innerHTML = `
-            <span class="user-info" onclick="navigate('/my-page')" style="cursor: pointer;">${state.user.name}(${state.user.department})</span>
+            <span class="user-info" onclick="navigate('/my-page')" style="cursor: pointer;">${state.user.name}(${departmentLabel})</span>
             <a href="#" onclick="logout(event)" class="nav-btn logout-btn">로그아웃</a>
         `;
     } else {
@@ -140,13 +141,13 @@ async function navigate(path, pushState = true) {
             return;
         }
 
-        if (state.user && state.user.role === 'pending' && !publicPaths.includes(pathname)) {
+        if (state.user && state.user.role === 'PENDING' && !publicPaths.includes(pathname)) {
             utils.showAlert('승인 대기 중인 사용자입니다. 관리자의 승인 이후에 사용가능합니다.', 'error', '접근 제한');
             await navigate('/');
             return;
         }
 
-        if (pathname === '/admin/users' && state.user?.role !== 'admin') {
+        if (pathname === '/admin/users' && state.user?.role !== 'ADMIN') {
             utils.showAlert('관리자 권한이 필요합니다.', 'error', '접근 제한');
             await navigate('/');
             return;

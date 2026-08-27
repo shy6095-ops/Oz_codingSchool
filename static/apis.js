@@ -25,7 +25,7 @@ const apis = {
         }
 
         try {
-            const response = await fetch(`${API_BASE}${url}`, { ...options, headers });
+            const response = await fetch(`${API_BASE}${url}`, { ...options, headers, credentials: 'same-origin' });
             
             // 401 Unauthorized 처리 (토큰 만료 시 리프레시 시도)
             if (response.status === 401) {
@@ -54,7 +54,8 @@ const apis = {
                 try {
                     const refreshResponse = await fetch(`${API_BASE}/users/refresh`, {
                         method: 'POST',
-                        headers: { 'Content-Type': 'application/json' }
+                        headers: { 'Content-Type': 'application/json' },
+                        credentials: 'same-origin'
                     });
 
                     if (refreshResponse.ok) {
@@ -156,7 +157,8 @@ const apis = {
     async refresh() {
         return await fetch(`${API_BASE}/users/refresh`, {
             method: 'POST',
-            headers: { 'Content-Type': 'application/json' }
+            headers: { 'Content-Type': 'application/json' },
+            credentials: 'same-origin'
         });
     },
 
@@ -321,8 +323,8 @@ const apis = {
      * 유저 권한 수정 (관리자 전용)
      * [REQ-USER-005] 관리자 권한을 가진 유저는 다른 유저의 권한을 수정할 수 있다.
      */
-    async adminUpdateUserRole(roleData) {
-        return await this.request('/admin/users/role', {
+    async adminUpdateUserRoles(roleData) {
+        return await this.request('/admin/users/roles', {
             method: 'PATCH',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify(roleData)

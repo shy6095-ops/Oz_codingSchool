@@ -2,6 +2,23 @@
  * 페이지 렌더링 및 이벤트 핸들러 모음
  */
 
+const departmentLabels = { DEV: '개발', MEDICAL: '의료', RESEARCH: '연구' };
+const genderLabels = { M: '남성', F: '여성' };
+const roleLabels = { PENDING: '대기자', STAFF: '스태프', ADMIN: '어드민' };
+
+function bindPasswordToggles() {
+    document.querySelectorAll('[data-password-toggle]').forEach((button) => {
+        button.addEventListener('click', () => {
+            const input = document.getElementById(button.dataset.passwordToggle);
+            if (!input) return;
+            const isMasked = input.type === 'password';
+            input.type = isMasked ? 'text' : 'password';
+            button.textContent = isMasked ? '숨기기' : '보기';
+            button.setAttribute('aria-label', isMasked ? '비밀번호 숨기기' : '비밀번호 보기');
+        });
+    });
+}
+
 const pages = {
     async renderHome() {
         const html = await utils.loadTemplate('home');
@@ -12,7 +29,7 @@ const pages = {
         const actions = document.getElementById('home-actions');
         if (!state.user) {
             actions.innerHTML = '<button onclick="navigate(\'/login\')">로그인하여 시작하기</button>';
-        } else if (state.user.role === 'pending') {
+        } else if (state.user.role === 'PENDING') {
             actions.innerHTML = '<p>관리자의 승인을 기다리는 중입니다.</p>';
         } else {
             actions.innerHTML = '<button onclick="navigate(\'/patients\')">환자 목록 보기</button>';
@@ -22,11 +39,13 @@ const pages = {
     async renderLogin() {
         const html = await utils.loadTemplate('login');
         document.getElementById('app').innerHTML = html;
+        bindPasswordToggles();
     },
 
     async renderSignup() {
         const html = await utils.loadTemplate('signup');
         document.getElementById('app').innerHTML = html;
+        bindPasswordToggles();
         
         const phoneInput = document.getElementById('signup-phone');
         if (phoneInput) {
@@ -196,10 +215,10 @@ const pages = {
         // 현재 사용자 정보 표시
         document.getElementById('me-email').innerText = state.user.email;
         document.getElementById('me-name-display').innerText = state.user.name;
-        document.getElementById('me-department-display').innerText = state.user.department;
-        document.getElementById('me-gender-display').innerText = state.user.gender === 'male' ? '남성' : '여성';
+        document.getElementById('me-department-display').innerText = departmentLabels[state.user.department];
+        document.getElementById('me-gender-display').innerText = genderLabels[state.user.gender];
         document.getElementById('me-phone-display').innerText = utils.formatPhoneNumber(state.user.phone_number);
-        document.getElementById('me-role-display').innerText = state.user.role;
+        document.getElementById('me-role-display').innerText = roleLabels[state.user.role];
 
         // 수정 폼 초기값 설정
         document.getElementById('update-me-department').value = state.user.department;
@@ -214,6 +233,7 @@ const pages = {
         document.getElementById('update-me-form').onsubmit = (e) => this.handleUpdateMe(e);
         document.getElementById('update-password-form').onsubmit = (e) => this.handleUpdatePassword(e);
         document.getElementById('delete-me-btn').onclick = () => this.handleDeleteMe();
+        bindPasswordToggles();
     },
 
     async renderAdminUsers(params = {}) {
@@ -231,23 +251,19 @@ const pages = {
 
         const listBody = document.getElementById('admin-users-list');
         if (users.length === 0) {
-            listBody.innerHTML = '<tr><td colspan="7" style="text-align: center; padding: 2rem;">검색 결과가 없습니다.</td></tr>';
+            listBody.innerHTML = '<tr><td colspan="9" style="text-align: center; padding: 2rem;">검색 결과가 없습니다.</td></tr>';
             return;
         }
         listBody.innerHTML = users.map(u => `
             <tr>
+                <td><input type="checkbox" name="admin-user-id" value="${u.id}" ${u.id === state.user.id ? 'disabled' : ''}></td>
                 <td>${u.id}</td>
                 <td>${u.name}</td>
                 <td>${u.email}</td>
-                <td>${u.department}</td>
+                <td>${departmentLabels[u.department]}</td>
+                <td>${genderLabels[u.gender]}</td>
                 <td>${utils.formatPhoneNumber(u.phone_number)}</td>
-                <td>
-                    <select onchange="pages.handleRoleUpdate(${u.id}, this.value)" ${u.id === state.user.id ? 'disabled' : ''}>
-                        <option value="pending" ${u.role === 'pending' ? 'selected' : ''}>승인대기</option>
-                        <option value="staff" ${u.role === 'staff' ? 'selected' : ''}>일반회원</option>
-                        <option value="admin" ${u.role === 'admin' ? 'selected' : ''}>관리자</option>
-                    </select>
-                </td>
+                <td>${roleLabels[u.role]}</td>
                 <td>${u.is_active ? '<span class="status-badge success">활성</span>' : '<span class="status-badge error">비활성</span>'}</td>
             </tr>
         `).join('');
@@ -272,9 +288,22 @@ const pages = {
         navigate('/admin/users');
     },
 
-    async handleRoleUpdate(userId, newRole) {
+    toggleAdminSelection(checkbox) {
+        document.querySelectorAll('input[name="admin-user-id"]:not(:disabled)').forEach((input) => {
+            input.checked = checkbox.checked;
+        });
+    },
+
+    async handleSelectedRoleUpdate() {
+        const userIds = [...document.querySelectorAll('input[name="admin-user-id"]:checked')]
+            .map((input) => Number(input.value));
+        const role = document.getElementById('admin-role-select').value;
+        if (userIds.length === 0) {
+            utils.showAlert('권한을 변경할 회원을 선택해주세요.', 'error');
+            return;
+        }
         try {
-            await apis.adminUpdateUserRole({ user_id: userId, new_role: newRole });
+            await apis.adminUpdateUserRoles({ user_ids: userIds, role });
             utils.showAlert('권한이 변경되었습니다.', 'success');
             this.handleAdminSearch();
         } catch (err) {
@@ -314,9 +343,7 @@ const pages = {
             e.target.reset();
         } catch (err) {
             let msg = err.message;
-            if (err.status === 400) {
-                msg = '비밀번호는 "대소문자, 특수문자, 숫자를 각 1개씩 포함한 8자리 이상이어야 합니다."';
-            } else if (err.status === 500) {
+            if (err.status === 500) {
                 msg = '잠시 후 다시시도해주세요.';
             }
             utils.showAlert(msg, 'error', '비밀번호 변경 실패');

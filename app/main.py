@@ -1,14 +1,27 @@
 import os
+from contextlib import asynccontextmanager
 from pathlib import Path
 
 from fastapi import FastAPI
 from starlette.staticfiles import StaticFiles
 from starlette.responses import FileResponse
-from app.apis import practice_apis
+from app.apis import practice_apis, user_apis
+from app.core.db.databases import AsyncSessionLocal, async_engine, initialize_database
+from app.services.user_service import bootstrap_admin
 
 
-app = FastAPI()
+@asynccontextmanager
+async def lifespan(_: FastAPI):
+    await initialize_database()
+    async with AsyncSessionLocal() as db:
+        await bootstrap_admin(db)
+    yield
+    await async_engine.dispose()
+
+
+app = FastAPI(lifespan=lifespan)
 app.include_router(practice_apis.router)
+app.include_router(user_apis.router)
 BASE_DIR = Path(__file__).resolve().parent.parent
 
 # 만약 static, media 폴더가 존재하지 않으면 생성

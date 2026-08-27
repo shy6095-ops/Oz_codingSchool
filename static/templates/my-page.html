@@ -17,9 +17,9 @@
         <form id="update-me-form">
             <label for="update-me-department">부서</label>
             <select id="update-me-department" required>
-                <option value="developer">개발팀</option>
-                <option value="medical team">의료진</option>
-                <option value="researcher">연구진</option>
+                <option value="DEV">개발</option>
+                <option value="MEDICAL">의료</option>
+                <option value="RESEARCH">연구</option>
             </select>
 
             <label for="update-me-phone">전화번호</label>
@@ -36,10 +36,16 @@
         <h3>비밀번호 변경</h3>
         <form id="update-password-form">
             <label for="old-password">현재 비밀번호</label>
-            <input type="password" id="old-password" required>
+            <div class="password-field">
+                <input type="password" id="old-password" required>
+                <button type="button" data-password-toggle="old-password" aria-label="비밀번호 보기">보기</button>
+            </div>
 
             <label for="new-password">새 비밀번호</label>
-            <input type="password" id="new-password" required>
+            <div class="password-field">
+                <input type="password" id="new-password" required>
+                <button type="button" data-password-toggle="new-password" aria-label="비밀번호 보기">보기</button>
+            </div>
 
             <button type="submit" style="margin-top: 0.5rem; background-color: var(--secondary-color);">비밀번호 변경</button>
         </form>

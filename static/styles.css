@@ -147,6 +147,28 @@ input:focus, textarea:focus, select:focus {
     box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.2);
 }
 
+.password-field {
+    display: flex;
+    gap: 0.5rem;
+}
+
+.password-field input {
+    flex: 1;
+}
+
+.password-field button {
+    min-width: 4.5rem;
+    padding: 0.5rem;
+    background-color: #6b7280;
+}
+
+.role-bulk-actions {
+    display: flex;
+    gap: 0.5rem;
+    align-items: center;
+    margin-bottom: 1rem;
+}
+
 select {
     cursor: pointer;
     appearance: none;
