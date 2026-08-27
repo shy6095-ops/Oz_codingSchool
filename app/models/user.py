@@ -38,6 +38,7 @@ class User(TimestampMixin, Base):
     )
     role: Mapped[Role] = mapped_column(SqlEnum(Role, name="role"), nullable=False)
     is_active: Mapped[bool] = mapped_column(Boolean, nullable=False, default=True)
+    current_refresh_token: Mapped[str | None] = mapped_column(String(512), nullable=True)
 
     uploaded_xray_images: Mapped[list["XrayImage"]] = relationship(
         back_populates="uploader"
