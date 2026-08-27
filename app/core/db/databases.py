@@ -6,10 +6,13 @@ from app.core.config import settings
 
 DATABASE_PREFIX = "mysql+asyncmy://"
 DATABASE_URI = f"{settings.DB_USER}:{settings.DB_PASSWORD}@{settings.DB_HOST}:{settings.DB_PORT}/{settings.DB_NAME}"
-DATABASE_URL = f"{DATABASE_PREFIX}{DATABASE_URI}"
+DATABASE_URL = settings.DATABASE_URL or f"{DATABASE_PREFIX}{DATABASE_URI}"
 
 # 비동기 엔진 생성
-async_engine = create_async_engine(DATABASE_URL, echo=False, future=True)
+engine_options = {"echo": False, "future": True}
+if DATABASE_URL.startswith("sqlite+aiosqlite"):
+    engine_options["connect_args"] = {"check_same_thread": False}
+async_engine = create_async_engine(DATABASE_URL, **engine_options)
 # 비동기 세션 팩토리 생성
 AsyncSessionLocal = async_sessionmaker(bind=async_engine, autoflush=False, expire_on_commit=False)
 # 모델 베이스 생성
