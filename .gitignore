@@ -21,3 +21,7 @@ envs/
 .env
 
 .python-version
+
+# Local development files
+.DS_Store
+*.db

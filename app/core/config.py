@@ -11,6 +11,8 @@ class Settings(BaseSettings):
     DB_NAME: str = "ai_health"
     JWT_SECRET_KEY: str = "change-this-secret-in-production"
     ACCESS_TOKEN_EXPIRE_MINUTES: int = 30
+    REFRESH_TOKEN_EXPIRE_DAYS: int = 7
+    REFRESH_TOKEN_COOKIE_NAME: str = "refresh_token"
 
     model_config = {
         "env_file": ".env",

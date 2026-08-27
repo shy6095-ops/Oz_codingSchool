@@ -22,19 +22,23 @@ class UserCreate(BaseModel):
         return value
 
 
-class UserUpdate(BaseModel):
-    name: str | None = Field(default=None, min_length=1, max_length=20)
-    password: str | None = Field(default=None, min_length=8, max_length=128)
+class LoginRequest(BaseModel):
+    email: EmailStr
+    password: str = Field(min_length=8, max_length=128)
 
-    @field_validator("name")
-    @classmethod
-    def updated_name_must_not_be_blank(cls, value: str | None) -> str | None:
-        if value is None:
-            return None
-        value = value.strip()
-        if not value:
-            raise ValueError("name은 빈 문자열일 수 없습니다.")
-        return value
+
+class UserUpdate(BaseModel):
+    department: Department | None = None
+    phone_number: str | None = Field(default=None, min_length=1, max_length=20)
+
+
+class PasswordChangeRequest(BaseModel):
+    current_password: str = Field(min_length=8, max_length=128)
+    new_password: str = Field(min_length=8, max_length=128)
+
+
+class UserRoleUpdate(BaseModel):
+    role: Role
 
 
 class UserResponse(BaseModel):
@@ -52,14 +56,12 @@ class UserResponse(BaseModel):
     updated_at: datetime | None
 
 
-class UserUpdateResponse(BaseModel):
-    model_config = ConfigDict(from_attributes=True)
+class UserListResponse(BaseModel):
+    total: int
+    items: list[UserResponse]
 
-    id: int
-    email: EmailStr
-    name: str
-    phone_number: str
-    gender: Gender
-    department: Department
-    role: Role
-    updated_at: datetime | None
+
+class AccessTokenResponse(BaseModel):
+    access_token: str
+    token_type: str = "bearer"
+    expires_in: int
