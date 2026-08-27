@@ -21,3 +21,6 @@ envs/
 .env
 
 .python-version
+
+# Local SQLite runtime data
+db/*.db
