@@ -62,7 +62,7 @@ const pages = {
                 <td>${p.id}</td>
                 <td>${p.name}</td>
                 <td>${p.age}</td>
-                <td>${p.gender === 'male' ? '남성' : '여성'}</td>
+                <td>${p.gender === 'M' ? '남성' : '여성'}</td>
                 <td>${utils.formatPhoneNumber(p.phone_number)}</td>
                 <td><button onclick="navigate('/patients/${p.id}')">상세보기</button></td>
             </tr>
@@ -88,7 +88,7 @@ const pages = {
         app.innerHTML = html;
         
         // 환자 정보 표시
-        document.getElementById('patient-name').innerText = `${patient.name} (${patient.gender === 'male' ? '남성' : '여성'})`;
+        document.getElementById('patient-name').innerText = `${patient.name} (${patient.gender === 'M' ? '남성' : '여성'})`;
         document.getElementById('patient-info').innerText = `나이: ${patient.age}세 | 연락처: ${utils.formatPhoneNumber(patient.phone_number)}`;
         
         // 수정 폼 초기값 설정
@@ -111,7 +111,7 @@ const pages = {
             <tr>
                 <td>${r.id}</td>
                 <td>${r.chart_number}</td>
-                <td>${r.symptoms}</td>
+                <td>${r.symptoms.length > 100 ? `${r.symptoms.slice(0, 100)}…` : r.symptoms}</td>
                 <td>${new Date(r.created_at).toLocaleString()}</td>
                 <td><button onclick="navigate('/medical-records/${r.id}')">상세보기</button></td>
             </tr>
@@ -145,7 +145,12 @@ const pages = {
 
     async renderRecordDetail(recordId) {
         const record = await apis.getMedicalRecord(recordId);
-        const analyses = await apis.getMedicalRecordAnalyses(recordId);
+        let analyses = [];
+        try {
+            analyses = await apis.getMedicalRecordAnalyses(recordId);
+        } catch (_) {
+            // AI 기능은 이번 환자 관리 최소 구현 범위에 포함하지 않는다.
+        }
         const html = await utils.loadTemplate('record-detail');
         const app = document.getElementById('app');
         app.innerHTML = html;
@@ -154,11 +159,15 @@ const pages = {
         document.getElementById('chart-number').innerText = record.chart_number;
         document.getElementById('symptoms-text').innerText = record.symptoms;
         document.getElementById('created-at').innerText = new Date(record.created_at).toLocaleString();
-        document.getElementById('xray-img').src = record.xray_image_url;
+        if (record.xray_image_url) {
+            document.getElementById('xray-img').src = record.xray_image_url;
+        } else {
+            document.getElementById('xray-image-section').style.display = 'none';
+        }
         
         document.getElementById('predict-btn').onclick = () => this.handlePredict(recordId);
         document.getElementById('back-to-patient-btn').onclick = () => navigate(`/patients/${record.patient_id}`);
-        
+
         const analysisList = document.getElementById('analysis-list');
         if (analyses.length === 0) {
             analysisList.innerHTML = '<p>저장된 예측 결과가 없습니다.</p>';
@@ -412,7 +421,8 @@ const pages = {
         formData.append('patient_id', patientId);
         formData.append('chart_number', document.getElementById('chart_number').value);
         formData.append('symptoms', document.getElementById('symptoms').value);
-        formData.append('xray_image', document.getElementById('xray_image').files[0]);
+        const xrayImage = document.getElementById('xray_image').files[0];
+        if (xrayImage) formData.append('xray_image', xrayImage);
 
         try {
             await apis.createMedicalRecord(formData);

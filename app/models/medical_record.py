@@ -1,4 +1,4 @@
-from sqlalchemy import BigInteger, ForeignKey, String, Text
+from sqlalchemy import ForeignKey, Integer, String, Text
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
 from app.core.db.databases import Base
@@ -8,9 +8,9 @@ from app.core.db.models import TimestampMixin
 class MedicalRecord(TimestampMixin, Base):
     __tablename__ = "medical_records"
 
-    id: Mapped[int] = mapped_column(BigInteger, primary_key=True, autoincrement=True)
+    id: Mapped[int] = mapped_column(Integer, primary_key=True, autoincrement=True)
     patient_id: Mapped[int] = mapped_column(
-        BigInteger, ForeignKey("patients.id"), nullable=False
+        Integer, ForeignKey("patients.id"), nullable=False
     )
     chart_number: Mapped[str] = mapped_column(String(50), nullable=False)
     symptoms: Mapped[str] = mapped_column(Text, nullable=False)

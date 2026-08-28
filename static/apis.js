@@ -303,7 +303,7 @@ const apis = {
      * [REQ-PRED-002] 특정 진료기록에 대해 수행된 모든 AI 예측 결과 목록을 조회한다.
      */
     async getMedicalRecordAnalyses(recordId) {
-        return await this.request(`/medical-records/${recordId}/analyses`);
+        return await this.request(`/medical-records/${recordId}/analyses`, {}, true);
     },
 
     // --- Admin ---
