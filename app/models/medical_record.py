@@ -16,7 +16,9 @@ class MedicalRecord(TimestampMixin, Base):
     symptoms: Mapped[str] = mapped_column(Text, nullable=False)
 
     patient: Mapped["Patient"] = relationship(back_populates="medical_records")
-    xray_images: Mapped[list["XrayImage"]] = relationship(back_populates="medical_record")
+    xray_images: Mapped[list["XrayImage"]] = relationship(
+        back_populates="medical_record", cascade="all, delete-orphan"
+    )
     ai_analysis_results: Mapped[list["AiAnalysisResult"]] = relationship(
-        back_populates="medical_record"
+        back_populates="medical_record", cascade="all, delete-orphan"
     )

@@ -7,7 +7,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.core.db.databases import async_get_db
 from app.core.security import decode_token
-from app.models.user import Role, User
+from app.models.user import Department, Role, User
 from app.repositories.user_repository import UserRepository
 from app.services.user_service import UserService
 
@@ -63,6 +63,18 @@ async def get_current_admin(
         raise HTTPException(
             status_code=status.HTTP_403_FORBIDDEN,
             detail="관리자 권한이 필요합니다.",
+        )
+    return current_user
+
+
+async def get_current_medical_staff(
+    current_user: Annotated[User, Depends(get_current_user)],
+) -> User:
+    """REQ-PTNT-001/REQ-MDR-001: 사내 의료인(department=MEDICAL) 역할 필요 API 전용"""
+    if current_user.department != Department.MEDICAL:
+        raise HTTPException(
+            status_code=status.HTTP_403_FORBIDDEN,
+            detail="의료인만 접근할 수 있습니다.",
         )
     return current_user
 

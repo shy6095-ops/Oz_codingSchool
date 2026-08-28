@@ -5,11 +5,15 @@ from fastapi import FastAPI
 from starlette.staticfiles import StaticFiles
 from starlette.responses import FileResponse
 from app.apis import practice_apis
+from app.apis.medical_record_router import router as medical_record_router
+from app.apis.patient_router import router as patient_router
 from app.apis.user_router import router as user_router
 
 app = FastAPI()
 app.include_router(practice_apis.router)
 app.include_router(user_router)
+app.include_router(patient_router)
+app.include_router(medical_record_router)
 BASE_DIR = Path(__file__).resolve().parent.parent
 
 # 만약 static, media 폴더가 존재하지 않으면 생성

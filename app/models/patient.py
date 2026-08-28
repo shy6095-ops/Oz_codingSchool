@@ -16,5 +16,5 @@ class Patient(TimestampMixin, Base):
     phone: Mapped[str] = mapped_column(String(20), nullable=False)
 
     medical_records: Mapped[list["MedicalRecord"]] = relationship(
-        back_populates="patient"
+        back_populates="patient", cascade="all, delete-orphan"
     )
