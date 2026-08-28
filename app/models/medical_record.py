@@ -1,8 +1,15 @@
+from typing import TYPE_CHECKING
+
 from sqlalchemy import BigInteger, ForeignKey, String, Text
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
 from app.core.db.databases import Base
 from app.core.db.models import TimestampMixin
+
+if TYPE_CHECKING:
+    from app.models.ai_analysis_result import AiAnalysisResult
+    from app.models.patient import Patient
+    from app.models.xray_image import XrayImage
 
 
 class MedicalRecord(TimestampMixin, Base):
@@ -16,7 +23,9 @@ class MedicalRecord(TimestampMixin, Base):
     symptoms: Mapped[str] = mapped_column(Text, nullable=False)
 
     patient: Mapped["Patient"] = relationship(back_populates="medical_records")
-    xray_images: Mapped[list["XrayImage"]] = relationship(back_populates="medical_record")
+    xray_images: Mapped[list["XrayImage"]] = relationship(
+        back_populates="medical_record", cascade="all, delete-orphan"
+    )
     ai_analysis_results: Mapped[list["AiAnalysisResult"]] = relationship(
-        back_populates="medical_record"
+        back_populates="medical_record", cascade="all, delete-orphan"
     )

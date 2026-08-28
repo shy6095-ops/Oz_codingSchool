@@ -1,3 +1,5 @@
+from typing import TYPE_CHECKING
+
 from enum import Enum
 
 from sqlalchemy import Boolean, Enum as SqlEnum, Integer, String
@@ -5,6 +7,9 @@ from sqlalchemy.orm import Mapped, mapped_column, relationship
 
 from app.core.db.databases import Base
 from app.core.db.models import TimestampMixin
+
+if TYPE_CHECKING:
+    from app.models.xray_image import XrayImage
 
 
 class Gender(str, Enum):

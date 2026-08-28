@@ -1,3 +1,5 @@
+from typing import TYPE_CHECKING
+
 from decimal import Decimal
 
 from sqlalchemy import BigInteger, Boolean, DECIMAL, ForeignKey, String
@@ -5,6 +7,9 @@ from sqlalchemy.orm import Mapped, mapped_column, relationship
 
 from app.core.db.databases import Base
 from app.core.db.models import TimestampMixin
+
+if TYPE_CHECKING:
+    from app.models.medical_record import MedicalRecord
 
 
 class AiAnalysisResult(TimestampMixin, Base):

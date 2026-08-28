@@ -1,3 +1,5 @@
+from typing import TYPE_CHECKING
+
 from datetime import datetime
 
 from sqlalchemy import BigInteger, DateTime, ForeignKey, Integer, String
@@ -5,6 +7,10 @@ from sqlalchemy.orm import Mapped, mapped_column, relationship
 
 from app.core.db.databases import Base
 from app.core.db.models import TimestampMixin
+
+if TYPE_CHECKING:
+    from app.models.medical_record import MedicalRecord
+    from app.models.user import User
 
 
 class XrayImage(TimestampMixin, Base):
