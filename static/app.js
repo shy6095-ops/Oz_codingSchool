@@ -4,6 +4,15 @@ const state = {
     currentPage: '/'
 };
 
+function togglePasswordVisibility(inputId, button) {
+    const input = document.getElementById(inputId);
+    const isHidden = input.type === "password";
+
+    input.type = isHidden ? "text" : "password";
+    button.textContent = isHidden ? "숨기기" : "보기";
+    button.setAttribute("aria-pressed", String(isHidden));
+}
+
 async function login(email, password) {
     const errorEl = document.getElementById('login-error');
     if (errorEl) errorEl.style.display = 'none';

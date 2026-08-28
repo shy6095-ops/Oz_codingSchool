@@ -40,5 +40,6 @@ class User(TimestampMixin, Base):
     is_active: Mapped[bool] = mapped_column(Boolean, nullable=False, default=True)
 
     uploaded_xray_images: Mapped[list["XrayImage"]] = relationship(
-        back_populates="uploader"
+        back_populates="uploader",
+        cascade="all, delete-orphan",
     )

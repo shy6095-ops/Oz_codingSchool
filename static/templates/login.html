@@ -5,8 +5,10 @@
         <input type="email" id="email" placeholder="이메일" required>
         
         <label for="password">비밀번호</label>
-        <input type="password" id="password" placeholder="비밀번호" required>
-        
+<div class="password-field">
+    <input type="password" id="password" placeholder="비밀번호" required>
+    <button type="button" class="password-toggle" onclick="togglePasswordVisibility('password', this)" aria-pressed="false">보기</button>
+</div>        
         <div id="login-error" class="error-message" style="display: none; color: var(--danger-color); font-size: 0.85rem; margin-top: -0.5rem; margin-bottom: 0.5rem; font-weight: 500;">
             아이디 또는 비밀번호를 확인해주세요.
         </div>

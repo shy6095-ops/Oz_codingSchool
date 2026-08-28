@@ -36,11 +36,15 @@
         <h3>비밀번호 변경</h3>
         <form id="update-password-form">
             <label for="old-password">현재 비밀번호</label>
-            <input type="password" id="old-password" required>
-
+<div class="password-field">
+    <input type="password" id="old-password" required>
+    <button type="button" class="password-toggle" onclick="togglePasswordVisibility('old-password', this)" aria-pressed="false">보기</button>
+</div>
             <label for="new-password">새 비밀번호</label>
-            <input type="password" id="new-password" required>
-
+<div class="password-field">
+    <input type="password" id="new-password" required>
+    <button type="button" class="password-toggle" onclick="togglePasswordVisibility('new-password', this)" aria-pressed="false">보기</button>
+</div>
             <button type="submit" style="margin-top: 0.5rem; background-color: var(--secondary-color);">비밀번호 변경</button>
         </form>
     </section>
