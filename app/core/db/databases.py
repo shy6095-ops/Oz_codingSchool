@@ -1,12 +1,12 @@
-from pathlib import Path
 from typing import AsyncGenerator
 
-from sqlalchemy.orm import declarative_base
 from sqlalchemy.ext.asyncio import AsyncSession, create_async_engine, async_sessionmaker
+from sqlalchemy.orm import declarative_base
+from app.core.config import settings
 
-PROJECT_ROOT = Path(__file__).resolve().parents[3]
-DATABASE_PATH = PROJECT_ROOT / "db" / "ai_health.db"
-DATABASE_URL = f"sqlite+aiosqlite:///{DATABASE_PATH}"
+DATABASE_PREFIX = "mysql+asyncmy://"
+DATABASE_URI = f"{settings.DB_USER}:{settings.DB_PASSWORD}@{settings.DB_HOST}:{settings.DB_PORT}/{settings.DB_NAME}"
+DATABASE_URL = f"{DATABASE_PREFIX}{DATABASE_URI}"
 
 # 비동기 엔진 생성
 async_engine = create_async_engine(DATABASE_URL, echo=False, future=True)
@@ -18,13 +18,3 @@ Base = declarative_base()
 async def async_get_db() -> AsyncGenerator[AsyncSession, None]:
     async with AsyncSessionLocal() as db:
         yield db
-
-
-async def init_db() -> None:
-    """로컬 SQLite 파일과 과제에 필요한 테이블을 준비한다."""
-    DATABASE_PATH.parent.mkdir(parents=True, exist_ok=True)
-    # 모든 모델을 등록한 뒤 metadata를 생성한다.
-    from app import models  # noqa: F401
-
-    async with async_engine.begin() as connection:
-        await connection.run_sync(Base.metadata.create_all)

@@ -53,11 +53,11 @@ const pages = {
         if (maxAgeInput && params.max_age) maxAgeInput.value = params.max_age;
         
         const listBody = document.getElementById('patients-list');
-        if (patients.length === 0) {
+        if (patients.items.length === 0) {
             listBody.innerHTML = '<tr><td colspan="6" style="text-align: center; padding: 2rem;">검색 결과가 없습니다.</td></tr>';
             return;
         }
-        listBody.innerHTML = patients.map(p => `
+        listBody.innerHTML = patients.items.map(p => `
             <tr>
                 <td>${p.id}</td>
                 <td>${p.name}</td>
@@ -107,13 +107,13 @@ const pages = {
         state.currentPatientId = patientId;
 
         const listBody = document.getElementById('records-list');
-        listBody.innerHTML = records.map(r => `
+        listBody.innerHTML = records.items.map(r => `
             <tr>
                 <td>${r.id}</td>
                 <td>${r.chart_number}</td>
                 <td>${r.symptoms.length > 100 ? `${r.symptoms.slice(0, 100)}…` : r.symptoms}</td>
                 <td>${new Date(r.created_at).toLocaleString()}</td>
-                <td><button onclick="navigate('/medical-records/${r.id}')">상세보기</button></td>
+                <td><button onclick="navigate('/patients/${patientId}/medical-records/${r.id}')">상세보기</button></td>
             </tr>
         `).join('');
     },
@@ -143,8 +143,8 @@ const pages = {
         document.getElementById('cancel-btn').onclick = () => navigate(`/patients/${patientId}`);
     },
 
-    async renderRecordDetail(recordId) {
-        const record = await apis.getMedicalRecord(recordId);
+    async renderRecordDetail(patientId, recordId) {
+        const record = await apis.getMedicalRecord(patientId, recordId);
         let analyses = [];
         try {
             analyses = await apis.getMedicalRecordAnalyses(recordId);
@@ -425,7 +425,7 @@ const pages = {
         if (xrayImage) formData.append('xray_image', xrayImage);
 
         try {
-            await apis.createMedicalRecord(formData);
+            await apis.createMedicalRecord(patientId, formData);
             utils.showAlert('진료 기록이 등록되었습니다.', 'success');
             navigate(`/patients/${patientId}`);
         } catch (err) {

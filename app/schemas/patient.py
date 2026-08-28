@@ -35,6 +35,13 @@ class PatientResponse(BaseModel):
     updated_at: datetime | None
 
 
+class PatientListResponse(BaseModel):
+    total: int
+    page: int
+    size: int
+    items: list[PatientResponse]
+
+
 class MedicalRecordListResponse(BaseModel):
     id: int
     patient_id: int
@@ -45,3 +52,10 @@ class MedicalRecordListResponse(BaseModel):
 
 class MedicalRecordDetailResponse(MedicalRecordListResponse):
     xray_image_url: str | None
+
+
+class MedicalRecordPageResponse(BaseModel):
+    total: int
+    page: int
+    size: int
+    items: list[MedicalRecordListResponse]

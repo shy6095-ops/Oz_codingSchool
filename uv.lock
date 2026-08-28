@@ -11,7 +11,6 @@ name = "ai-health-web-assignment"
 version = "0.1.0"
 source = { virtual = "." }
 dependencies = [
-    { name = "aiosqlite" },
     { name = "alembic" },
     { name = "asyncmy" },
     { name = "bcrypt" },
@@ -27,12 +26,12 @@ dependencies = [
 
 [package.dev-dependencies]
 dev = [
+    { name = "aiosqlite" },
     { name = "pytest" },
 ]
 
 [package.metadata]
 requires-dist = [
-    { name = "aiosqlite", specifier = ">=0.22.1" },
     { name = "alembic", specifier = ">=1.18.4" },
     { name = "asyncmy", specifier = ">=0.2.11" },
     { name = "bcrypt", specifier = "==4.0.1" },
@@ -47,7 +46,10 @@ requires-dist = [
 ]
 
 [package.metadata.requires-dev]
-dev = [{ name = "pytest", specifier = ">=8.3.5" }]
+dev = [
+    { name = "aiosqlite", specifier = ">=0.22.1" },
+    { name = "pytest", specifier = ">=8.3.5" },
+]
 
 [[package]]
 name = "aiosqlite"

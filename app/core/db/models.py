@@ -1,10 +1,14 @@
 import uuid as uuid_pkg
 from datetime import UTC, datetime
 
-from sqlalchemy import Boolean, DateTime, text
+from sqlalchemy import BigInteger, Boolean, DateTime, Integer, text
 from sqlalchemy.dialects.mysql import CHAR
 from sqlalchemy.orm import Mapped, mapped_column
 from uuid6 import uuid7
+
+
+# 운영 MySQL에서는 BIGINT, 테스트 전용 SQLite에서는 자동 증가 가능한 INTEGER를 사용한다.
+BIGINT_ID = BigInteger().with_variant(Integer, "sqlite")
 
 
 class UUIDMixin:

@@ -265,8 +265,8 @@ const apis = {
      * 진료 기록 등록
      * [REQ-MDR-001] 사내 의료인 역할을 가진 유저만 환자의 진료 기록을 등록할 수 있다.
      */
-    async createMedicalRecord(formData) {
-        return await this.request('/medical-records', {
+    async createMedicalRecord(patientId, formData) {
+        return await this.request(`/patients/${patientId}/medical-records`, {
             method: 'POST',
             body: formData
         });
@@ -284,8 +284,8 @@ const apis = {
      * 진료 기록 상세 조회
      * [REQ-MDR-003] 특정 진료 기록의 상세 내용을 조회할 수 있다.
      */
-    async getMedicalRecord(recordId) {
-        return await this.request(`/medical-records/${recordId}`);
+    async getMedicalRecord(patientId, recordId) {
+        return await this.request(`/patients/${patientId}/medical-records/${recordId}`);
     },
 
     // --- AI Prediction ---

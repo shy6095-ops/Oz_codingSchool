@@ -5,7 +5,7 @@
 | 항목 | 내용 |
 | --- | --- |
 | Base URL | `/api/v1` |
-| 인증 필요 여부 | N (과제 최소 구현 범위) |
+| 인증 필요 여부 | Y (`Authorization: Bearer <access_token>`) |
 | 저장소 | MySQL 데이터베이스, 서버 로컬 `media/xrays/` |
 | 처리 방식 | DB I/O는 SQLAlchemy `AsyncSession`, 이미지 파일 I/O는 `asyncio.to_thread` |
 
@@ -20,6 +20,8 @@
 | Endpoint | `POST /api/v1/patients` |
 | Content-Type | `application/json` |
 | 성공 | `201 Created` |
+
+의료 부서(`MEDICAL`) 사용자만 등록할 수 있다. 로그인하지 않은 요청은 `401 Unauthorized`, 다른 부서는 `403 Forbidden`을 반환한다.
 
 요청 본문:
 
@@ -63,10 +65,12 @@
 | `gender` | `M` / `F` | 성별 필터 |
 | `min_age` | integer | 최소 나이 (0~130) |
 | `max_age` | integer | 최대 나이 (0~130) |
+| `page` | integer | 페이지 번호, 기본값 `1` |
+| `size` | integer | 페이지 크기(1~100), 기본값 `20` |
 
 예시: `GET /api/v1/patients?name=홍&gender=M&min_age=20&max_age=60`
 
-성공 응답은 환자 배열이며 각 항목은 `id`, `name`, `age`, `gender`, `phone_number`, `created_at`, `updated_at`을 포함한다. `min_age`가 `max_age`보다 크면 `422 Unprocessable Entity`를 반환한다.
+성공 응답은 `total`, `page`, `size`, `items`를 포함한다. `items`의 각 항목은 `id`, `name`, `age`, `gender`, `phone_number`, `created_at`, `updated_at`을 포함한다. `min_age`가 `max_age`보다 크면 `422 Unprocessable Entity`를 반환한다.
 
 ### 2.3 환자 상세 조회 — REQ-PTNT-003
 
@@ -113,15 +117,16 @@
 
 | 항목 | 내용 |
 | --- | --- |
-| Endpoint | `POST /api/v1/medical-records` |
+| Endpoint | `POST /api/v1/patients/{patient_id}/medical-records` |
 | Content-Type | `multipart/form-data` |
 | 성공 | `201 Created` |
 
-필수 form-data 필드:
+의료 부서(`MEDICAL`) 사용자만 등록할 수 있다.
+
+필수 form-data 필드 (`patient_id`는 경로 파라미터):
 
 | 이름 | 타입 | 설명 |
 | --- | --- | --- |
-| `patient_id` | integer | 등록할 환자 ID |
 | `chart_number` | string | 차트 번호, 최대 50자 |
 | `symptoms` | string | 진료 증상 |
 
@@ -150,16 +155,16 @@
 
 | 항목 | 내용 |
 | --- | --- |
-| Endpoint | `GET /api/v1/patients/{patient_id}/medical-records` |
+| Endpoint | `GET /api/v1/patients/{patient_id}/medical-records?page=1&size=20` |
 | 성공 | `200 OK` |
 
-성공 응답은 최신 진료기록부터 배열로 반환하며 각 항목은 `id`, `patient_id`, `chart_number`, `symptoms`, `created_at`을 포함한다. 화면에서는 `symptoms`가 100자를 넘으면 말줄임표로 표시한다. 환자가 없으면 `404 Not Found`를 반환한다.
+성공 응답은 최신 진료기록부터 `total`, `page`, `size`, `items` 형태로 반환한다. `items`의 각 항목은 `id`, `patient_id`, `chart_number`, `symptoms`, `created_at`을 포함한다. 화면에서는 `symptoms`가 100자를 넘으면 말줄임표로 표시한다. 환자가 없으면 `404 Not Found`를 반환한다.
 
 ### 3.3 진료기록 상세 조회 — REQ-MDR-003
 
 | 항목 | 내용 |
 | --- | --- |
-| Endpoint | `GET /api/v1/medical-records/{record_id}` |
+| Endpoint | `GET /api/v1/patients/{patient_id}/medical-records/{record_id}` |
 | 성공 | `200 OK` |
 | 실패 | `404 Not Found` — 존재하지 않는 진료기록 |
 
@@ -189,6 +194,6 @@
 
 ## 5. 비고
 
-- 본 과제 범위에서는 환자·진료기록 API에 권한 검사를 적용하지 않는다.
+- 모든 환자·진료기록 API는 유효한 Bearer 액세스 토큰이 필요하다. 등록 API는 의료 부서 사용자만 사용할 수 있다.
 - DB와 파일 저장 작업은 비동기 흐름으로 처리하며, 파일 저장·삭제처럼 동기 파일 시스템 호출이 필요한 부분은 이벤트 루프를 막지 않도록 `asyncio.to_thread`를 사용한다.
 - NFR-PTNT-001, NFR-MDR-001의 3초 응답 목표를 위해 목록 조회는 필요한 범위만 조회하고, 이미지 파일은 응답 본문에 포함하지 않고 URL만 반환한다.

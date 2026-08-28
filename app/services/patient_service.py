@@ -4,7 +4,7 @@ from pathlib import Path
 from uuid import uuid4
 
 from fastapi import HTTPException, UploadFile, status
-from sqlalchemy import delete, select
+from sqlalchemy import delete, func, select
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.orm import selectinload
 
@@ -77,25 +77,38 @@ class PatientService:
         gender: Gender | None,
         min_age: int | None,
         max_age: int | None,
-    ) -> list[PatientResponse]:
+        page: int,
+        size: int,
+    ) -> tuple[int, list[PatientResponse]]:
         if min_age is not None and max_age is not None and min_age > max_age:
             raise HTTPException(
                 status_code=status.HTTP_422_UNPROCESSABLE_ENTITY,
                 detail="최소 나이는 최대 나이보다 클 수 없습니다.",
             )
 
-        statement = select(Patient).order_by(Patient.id.desc())
+        filters = []
         if name:
-            statement = statement.where(Patient.name.contains(name))
+            filters.append(Patient.name.contains(name))
         if gender:
-            statement = statement.where(Patient.gender == gender)
+            filters.append(Patient.gender == gender)
         if min_age is not None:
-            statement = statement.where(Patient.age >= min_age)
+            filters.append(Patient.age >= min_age)
         if max_age is not None:
-            statement = statement.where(Patient.age <= max_age)
+            filters.append(Patient.age <= max_age)
 
-        patients = (await self.session.scalars(statement)).all()
-        return [_patient_response(patient) for patient in patients]
+        total = await self.session.scalar(
+            select(func.count()).select_from(Patient).where(*filters)
+        )
+        patients = (
+            await self.session.scalars(
+                select(Patient)
+                .where(*filters)
+                .order_by(Patient.id.desc())
+                .offset((page - 1) * size)
+                .limit(size)
+            )
+        ).all()
+        return total or 0, [_patient_response(patient) for patient in patients]
 
     async def get_patient(self, patient_id: int) -> Patient:
         patient = await self.session.get(Patient, patient_id)
@@ -144,16 +157,25 @@ class PatientService:
 
         await asyncio.gather(*(self._delete_image_file(url) for url in image_urls))
 
-    async def list_medical_records(self, patient_id: int) -> list[MedicalRecordListResponse]:
+    async def list_medical_records(
+        self, patient_id: int, page: int, size: int
+    ) -> tuple[int, list[MedicalRecordListResponse]]:
         await self.get_patient(patient_id)
+        total = await self.session.scalar(
+            select(func.count())
+            .select_from(MedicalRecord)
+            .where(MedicalRecord.patient_id == patient_id)
+        )
         records = (
             await self.session.scalars(
                 select(MedicalRecord)
                 .where(MedicalRecord.patient_id == patient_id)
                 .order_by(MedicalRecord.id.desc())
+                .offset((page - 1) * size)
+                .limit(size)
             )
         ).all()
-        return [_record_list_response(record) for record in records]
+        return total or 0, [_record_list_response(record) for record in records]
 
     async def create_medical_record(
         self,
@@ -161,6 +183,7 @@ class PatientService:
         chart_number: str,
         symptoms: str,
         xray_image: UploadFile | None,
+        uploader_id: int,
     ) -> MedicalRecordDetailResponse:
         await self.get_patient(patient_id)
         image_url = await self._save_image(xray_image) if xray_image else None
@@ -175,6 +198,7 @@ class PatientService:
             if image_url:
                 image = XrayImage(
                     record_id=record.id,
+                    uploader_id=uploader_id,
                     image_url=image_url,
                     shooting_datetime=datetime.now(UTC),
                 )
@@ -188,11 +212,13 @@ class PatientService:
                 await self._delete_image_file(image_url)
             raise
 
-    async def get_medical_record(self, record_id: int) -> MedicalRecordDetailResponse:
+    async def get_medical_record(
+        self, patient_id: int, record_id: int
+    ) -> MedicalRecordDetailResponse:
         record = await self.session.scalar(
             select(MedicalRecord)
             .options(selectinload(MedicalRecord.xray_images))
-            .where(MedicalRecord.id == record_id)
+            .where(MedicalRecord.id == record_id, MedicalRecord.patient_id == patient_id)
         )
         if record is None:
             raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="진료 기록을 찾을 수 없습니다.")

@@ -1,5 +1,4 @@
 import os
-from contextlib import asynccontextmanager
 from pathlib import Path
 
 from fastapi import FastAPI
@@ -8,15 +7,8 @@ from starlette.responses import FileResponse
 from app.apis import practice_apis
 from app.apis.patient_apis import router as patient_router
 from app.apis.user_router import router as user_router
-from app.core.db.databases import init_db
 
-@asynccontextmanager
-async def lifespan(_: FastAPI):
-    await init_db()
-    yield
-
-
-app = FastAPI(lifespan=lifespan)
+app = FastAPI()
 app.include_router(practice_apis.router)
 app.include_router(user_router)
 app.include_router(patient_router)
