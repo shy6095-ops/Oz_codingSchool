@@ -7,8 +7,10 @@ from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.core.db.databases import async_get_db
 from app.core.security import decode_token
-from app.models.user import Role, User
+from app.models.user import Department, Role, User
+from app.repositories.prediction_repository import PredictionRepository
 from app.repositories.user_repository import UserRepository
+from app.services.prediction_service import PredictionService
 from app.services.user_service import UserService
 
 bearer_scheme = HTTPBearer(auto_error=False)
@@ -19,6 +21,11 @@ def get_user_service(
 ) -> UserService:
     return UserService(UserRepository(session))
 
+
+def get_prediction_service(
+    session: Annotated[AsyncSession, Depends(async_get_db)],
+) -> PredictionService:
+    return PredictionService(PredictionRepository(session))
 
 async def get_current_user(
     credentials: Annotated[
@@ -63,6 +70,21 @@ async def get_current_admin(
         raise HTTPException(
             status_code=status.HTTP_403_FORBIDDEN,
             detail="관리자 권한이 필요합니다.",
+        )
+    return current_user
+
+
+async def get_current_prediction_user(
+    current_user: Annotated[User, Depends(get_current_user)],
+) -> User:
+    """REQ-PRED-001/002: approved medical, development, or research users only."""
+    allowed_departments = {Department.MEDICAL, Department.DEV, Department.RESEARCH}
+    if current_user.role not in {Role.STAFF, Role.ADMIN} or (
+        current_user.department not in allowed_departments
+    ):
+        raise HTTPException(
+            status_code=status.HTTP_403_FORBIDDEN,
+            detail="승인된 의료, 개발 또는 연구 부서 사용자만 수행할 수 있습니다.",
         )
     return current_user
 
