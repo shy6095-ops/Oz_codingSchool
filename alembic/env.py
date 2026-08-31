@@ -14,7 +14,7 @@ sys.path.append(os.getcwd())
 from app.core.db.databases import Base, DATABASE_URL
 
 # Model Import
-from app import models
+from app.worker import models
 
 # Alembic Config object
 config = context.config

@@ -8,11 +8,11 @@ from sqlalchemy import delete, func, select
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.orm import selectinload
 
-from app.models.ai_analysis_result import AiAnalysisResult
-from app.models.medical_record import MedicalRecord
-from app.models.patient import Patient
-from app.models.user import Gender
-from app.models.xray_image import XrayImage
+from app.worker.models.ai_analysis_result import AiAnalysisResult
+from app.worker.models.medical_record import MedicalRecord
+from app.worker.models.patient import Patient
+from app.worker.models.user import Gender
+from app.worker.models.xray_image import XrayImage
 from app.schemas.patient import (
     MedicalRecordDetailResponse,
     MedicalRecordListResponse,

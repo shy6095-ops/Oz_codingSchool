@@ -176,18 +176,22 @@ const pages = {
                 <table>
                     <thead>
                         <tr>
-                            <th>수행 일시</th>
+                            <th>ID</th>
                             <th>폐렴 여부</th>
                             <th>Confidence</th>
+                            <th>Heatmap URL</th>
+                            <th>수행 일시</th>
                             <th>사용 모델</th>
                         </tr>
                     </thead>
                     <tbody>
                         ${analyses.map(a => `
                             <tr class="${a.is_pneumonia ? 'result-positive' : 'result-negative'}">
-                                <td>${new Date(a.created_at).toLocaleString()}</td>
+                                <td>${a.id}</td>
                                 <td><strong>${a.is_pneumonia ? 'Positive' : 'Negative'}</strong></td>
                                 <td>${a.confidence}%</td>
+                                <td>${a.heatmap_url || '-'}</td>
+                                <td>${new Date(a.created_at).toLocaleString()}</td>
                                 <td>${a.ai_model}</td>
                             </tr>
                         `).join('')}
@@ -483,7 +487,7 @@ const pages = {
         try {
             await apis.predictPneumonia(recordId);
             utils.showAlert('AI 예측이 완료되었습니다.', 'success');
-            navigate(`/medical-records/${recordId}`, false);
+            navigate(state.currentPage, false);
         } catch (err) {
             utils.showAlert(`AI 예측 실패: ${err.message}`, 'error');
         }

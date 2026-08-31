@@ -2,7 +2,7 @@ from datetime import datetime
 
 from pydantic import BaseModel, ConfigDict, Field, model_validator
 
-from app.models.user import Gender
+from app.worker.models.user import Gender
 
 
 class PatientCreateRequest(BaseModel):

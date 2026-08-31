@@ -11,7 +11,7 @@ from app.core.db.databases import Base, async_get_db
 from app.core.config import settings
 from app.core.security import create_access_token
 from app.main import app
-from app.models.user import Department, Gender, Role, User
+from app.worker.models.user import Department, Gender, Role, User
 
 
 class PatientApiContractTests(unittest.TestCase):

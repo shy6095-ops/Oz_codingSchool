@@ -3,7 +3,7 @@ from sqlalchemy.orm import Mapped, mapped_column, relationship
 
 from app.core.db.databases import Base
 from app.core.db.models import BIGINT_ID, TimestampMixin
-from app.models.user import Gender
+from app.worker.models.user import Gender
 
 
 class Patient(TimestampMixin, Base):

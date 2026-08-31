@@ -7,6 +7,7 @@ wheels/
 *.egg-info
 
 # IDE settings
+.DS_Store
 # pycharm
 .idea
 # VSCode
@@ -25,3 +26,6 @@ envs/
 # Local SQLite runtime data
 db/*.db
 db/*.db-*
+
+# Local agent implementation notes
+docs/superpowers/

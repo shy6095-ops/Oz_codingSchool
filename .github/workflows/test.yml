@@ -25,8 +25,19 @@ jobs:
           enable-cache: true
           cache-dependency-glob: uv.lock
 
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+
       - name: Install dependencies
         run: uv sync --group dev --frozen
 
-      - name: Run tests
+      - name: Run Python tests
         run: uv run pytest -v
+
+      - name: Run frontend tests
+        run: |
+          node tests/test_prediction_frontend.mjs
+          node --check static/apis.js
+          node --check static/pages.js

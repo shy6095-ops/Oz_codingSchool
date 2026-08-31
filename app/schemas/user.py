@@ -2,7 +2,7 @@ from datetime import datetime
 
 from pydantic import BaseModel, ConfigDict, EmailStr, Field
 
-from app.models.user import Department, Gender, Role
+from app.worker.models.user import Department, Gender, Role
 
 
 # ---------- 요청 스키마 ----------

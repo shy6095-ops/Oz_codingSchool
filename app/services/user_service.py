@@ -6,7 +6,7 @@ from app.core.security import (
     hash_password,
     verify_password,
 )
-from app.models.user import Department, Role, User
+from app.worker.models.user import Department, Role, User
 from app.repositories.user_repository import UserRepository
 from app.schemas.user import (
     PasswordChangeRequest,

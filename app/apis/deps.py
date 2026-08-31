@@ -7,7 +7,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.core.db.databases import async_get_db
 from app.core.security import decode_token
-from app.models.user import Department, Role, User
+from app.worker.models.user import Department, Role, User
 from app.repositories.user_repository import UserRepository
 from app.services.user_service import UserService
 
@@ -75,6 +75,18 @@ async def get_current_medical_user(
         raise HTTPException(
             status_code=status.HTTP_403_FORBIDDEN,
             detail="의료 부서 사용자만 등록할 수 있습니다.",
+        )
+    return current_user
+
+
+async def get_current_prediction_user(
+    current_user: Annotated[User, Depends(get_current_user)],
+) -> User:
+    """AI 예측 기능은 승인된 사내 사용자만 수행한다."""
+    if current_user.role == Role.PENDING:
+        raise HTTPException(
+            status_code=status.HTTP_403_FORBIDDEN,
+            detail="승인된 사용자만 AI 예측 기능을 사용할 수 있습니다.",
         )
     return current_user
 

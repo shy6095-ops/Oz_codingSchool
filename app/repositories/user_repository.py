@@ -1,7 +1,7 @@
 from sqlalchemy import func, or_, select
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from app.models.user import Department, Role, User
+from app.worker.models.user import Department, Role, User
 
 
 class UserRepository:

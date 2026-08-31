@@ -9,7 +9,7 @@ from app.apis.deps import (
     get_user_service,
 )
 from app.core.security import REFRESH_TOKEN_EXPIRE_DAYS
-from app.models.user import Department, User
+from app.worker.models.user import Department, User
 from app.schemas.user import (
     MessageResponse,
     PasswordChangeRequest,

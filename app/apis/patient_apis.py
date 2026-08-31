@@ -5,7 +5,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.apis.deps import get_current_medical_user, get_current_user
 from app.core.db.databases import async_get_db
-from app.models.user import Gender, User
+from app.worker.models.user import Gender, User
 from app.schemas.patient import (
     MedicalRecordDetailResponse,
     MedicalRecordPageResponse,
