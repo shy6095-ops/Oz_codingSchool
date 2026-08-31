@@ -1,18 +1,18 @@
 from datetime import datetime
 
-from sqlalchemy import BigInteger, DateTime, ForeignKey, Integer, String
+from sqlalchemy import DateTime, ForeignKey, Integer, String
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
 from app.core.db.databases import Base
-from app.core.db.models import TimestampMixin
+from app.core.db.models import BIGINT_ID, TimestampMixin
 
 
 class XrayImage(TimestampMixin, Base):
     __tablename__ = "xray_images"
 
-    id: Mapped[int] = mapped_column(BigInteger, primary_key=True, autoincrement=True)
+    id: Mapped[int] = mapped_column(BIGINT_ID, primary_key=True, autoincrement=True)
     record_id: Mapped[int] = mapped_column(
-        BigInteger, ForeignKey("medical_records.id"), nullable=False
+        BIGINT_ID, ForeignKey("medical_records.id"), nullable=False
     )
     uploader_id: Mapped[int] = mapped_column(Integer, ForeignKey("users.id"), nullable=False)
     image_url: Mapped[str] = mapped_column(String(2048), nullable=False)

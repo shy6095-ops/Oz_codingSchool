@@ -5,11 +5,13 @@ from fastapi import FastAPI
 from starlette.staticfiles import StaticFiles
 from starlette.responses import FileResponse
 from app.apis import practice_apis
+from app.apis.patient_apis import router as patient_router
 from app.apis.user_router import router as user_router
 
 app = FastAPI()
 app.include_router(practice_apis.router)
 app.include_router(user_router)
+app.include_router(patient_router)
 BASE_DIR = Path(__file__).resolve().parent.parent
 
 # 만약 static, media 폴더가 존재하지 않으면 생성
@@ -17,6 +19,7 @@ if not (BASE_DIR / "static").exists():
     os.mkdir(BASE_DIR / "static")
 if not (BASE_DIR / "media").exists():
     os.mkdir(BASE_DIR / "media")
+
 
 # 'static' 폴더를 '/static' 경로로 마운트 (CSS, JS 파일 서빙용)
 app.mount("/static", StaticFiles(directory=BASE_DIR / "static"), name="static")

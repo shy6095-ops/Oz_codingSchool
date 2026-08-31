@@ -1,18 +1,18 @@
 from decimal import Decimal
 
-from sqlalchemy import BigInteger, Boolean, DECIMAL, ForeignKey, String
+from sqlalchemy import Boolean, DECIMAL, ForeignKey, String
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
 from app.core.db.databases import Base
-from app.core.db.models import TimestampMixin
+from app.core.db.models import BIGINT_ID, TimestampMixin
 
 
 class AiAnalysisResult(TimestampMixin, Base):
     __tablename__ = "ai_analysis_results"
 
-    id: Mapped[int] = mapped_column(BigInteger, primary_key=True, autoincrement=True)
+    id: Mapped[int] = mapped_column(BIGINT_ID, primary_key=True, autoincrement=True)
     record_id: Mapped[int] = mapped_column(
-        BigInteger, ForeignKey("medical_records.id"), nullable=False
+        BIGINT_ID, ForeignKey("medical_records.id"), nullable=False
     )
     is_pneumonia: Mapped[bool] = mapped_column(Boolean, nullable=False)
     confidence: Mapped[Decimal] = mapped_column(DECIMAL(5, 2), nullable=False)
