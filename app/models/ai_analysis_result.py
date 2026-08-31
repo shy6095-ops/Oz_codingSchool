@@ -16,7 +16,7 @@ class AiAnalysisResult(TimestampMixin, Base):
     )
     is_pneumonia: Mapped[bool] = mapped_column(Boolean, nullable=False)
     confidence: Mapped[Decimal] = mapped_column(DECIMAL(5, 2), nullable=False)
-    heatmap_url: Mapped[str] = mapped_column(String(255), nullable=False)
+    heatmap_url: Mapped[str | None] = mapped_column(String(255), nullable=True)
     ai_model: Mapped[str] = mapped_column(String(50), nullable=False)
 
     medical_record: Mapped["MedicalRecord"] = relationship(
