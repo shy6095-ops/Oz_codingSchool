@@ -2,7 +2,7 @@ from typing import TYPE_CHECKING
 
 from decimal import Decimal
 
-from sqlalchemy import BigInteger, Boolean, DECIMAL, ForeignKey, String
+from sqlalchemy import BigInteger, Boolean, DECIMAL, ForeignKey, String, UniqueConstraint
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
 from app.core.db.databases import Base
@@ -14,6 +14,9 @@ if TYPE_CHECKING:
 
 class AiAnalysisResult(TimestampMixin, Base):
     __tablename__ = "ai_analysis_results"
+    __table_args__ = (
+        UniqueConstraint("record_id", "ai_model", name="uq_analysis_record_model"),
+    )
 
     id: Mapped[int] = mapped_column(BigInteger, primary_key=True, autoincrement=True)
     record_id: Mapped[int] = mapped_column(
