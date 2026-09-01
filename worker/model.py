@@ -50,6 +50,9 @@ def predict_pneumonia(image: Image.Image) -> dict:
     predicted_index = int(probabilities.argmax())
     return {
         "is_pneumonia": predicted_index == 1,
+        # 기존 pneumonia-predictions endpoint와의 응답 호환성도 유지한다.
+        "class_index": predicted_index,
+        "label": CLASS_NAMES[predicted_index],
         "confidence": round(probabilities[predicted_index].item() * 100, 2),
         "ai_model": MODEL_NAME,
     }
