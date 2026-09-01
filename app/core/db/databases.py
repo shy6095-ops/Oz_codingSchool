@@ -6,7 +6,8 @@ from app.core.config import settings
 
 DATABASE_PREFIX = "mysql+asyncmy://"
 DATABASE_URI = f"{settings.DB_USER}:{settings.DB_PASSWORD}@{settings.DB_HOST}:{settings.DB_PORT}/{settings.DB_NAME}"
-DATABASE_URL = f"{DATABASE_PREFIX}{DATABASE_URI}"
+# .env의 DATABASE_URL을 우선 사용한다. 예: sqlite+aiosqlite:///./db/ai_health.db
+DATABASE_URL = settings.DATABASE_URL or f"{DATABASE_PREFIX}{DATABASE_URI}"
 
 # 비동기 엔진 생성
 async_engine = create_async_engine(DATABASE_URL, echo=False, future=True)
