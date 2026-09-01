@@ -38,6 +38,8 @@ jobs:
 
       - name: Run frontend tests
         run: |
+          node tests/test_auth_frontend.mjs
           node tests/test_prediction_frontend.mjs
           node --check static/apis.js
+          node --check static/app.js
           node --check static/pages.js

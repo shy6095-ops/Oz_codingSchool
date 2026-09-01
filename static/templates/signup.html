@@ -10,16 +10,16 @@
         <label for="signup-department">부서</label>
         <select id="signup-department" required>
             <option value="">부서 선택</option>
-            <option value="developer">개발팀</option>
-            <option value="medical team">의료진</option>
-            <option value="researcher">연구진</option>
+            <option value="DEV">개발팀</option>
+            <option value="MEDICAL">의료진</option>
+            <option value="RESEARCH">연구진</option>
         </select>
         
         <label for="signup-gender">성별</label>
         <select id="signup-gender" required>
             <option value="">성별 선택</option>
-            <option value="male">남성</option>
-            <option value="female">여성</option>
+            <option value="M">남성</option>
+            <option value="F">여성</option>
         </select>
         
         <label for="signup-phone">전화번호</label>
@@ -27,7 +27,7 @@
         <div id="signup-phone-error" class="error-message" style="display: none; color: var(--danger-color); font-size: 0.85rem; margin-top: -0.5rem; margin-bottom: 0.5rem;"></div>
         
         <label for="signup-password">비밀번호</label>
-        <input type="password" id="signup-password" placeholder="비밀번호" required>
+        <input type="password" id="signup-password" placeholder="8자 이상 비밀번호" minlength="8" required>
         
         <div class="form-actions">
             <button type="submit">가입하기</button>

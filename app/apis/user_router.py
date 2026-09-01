@@ -9,6 +9,7 @@ from app.apis.deps import (
     get_user_service,
 )
 from app.core.security import REFRESH_TOKEN_EXPIRE_DAYS
+from app.core.config import settings
 from app.worker.models.user import Department, User
 from app.schemas.user import (
     MessageResponse,
@@ -34,7 +35,7 @@ def _set_refresh_cookie(response: Response, refresh_token: str) -> None:
         key="refresh_token",
         value=refresh_token,
         httponly=True,
-        secure=True,
+        secure=settings.SECURE_COOKIES,
         samesite="lax",
         max_age=REFRESH_COOKIE_MAX_AGE,
         path="/api/v1/users/token",
