@@ -272,7 +272,7 @@ const pages = {
     handleAdminSearch() {
         const search = document.getElementById('admin-search-query').value;
         const department = document.getElementById('admin-filter-dept').value;
-        
+
         const params = new URLSearchParams();
         if (search) params.set('search', search);
         if (department) params.set('department', department);
