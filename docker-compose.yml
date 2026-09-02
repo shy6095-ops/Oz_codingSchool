@@ -10,9 +10,7 @@ services:
     ports:
       - "8000:8000"
     volumes:
-      - ./app:/app/app
-      - ./static:/app/static
-      - ./media:/app/media
+      - .:/app
     env_file:
       - path: .env
         required: false

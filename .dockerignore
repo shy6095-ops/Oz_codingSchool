@@ -1,0 +1,46 @@
+# Version control and CI metadata
+.git
+.gitignore
+.github/
+
+# Environment files and secrets
+.env*
+*.env
+envs/
+
+# Python bytecode, virtual environments, and tool caches
+**/__pycache__/
+**/*.py[cod]
+.venv/
+venv/
+.mypy_cache/
+.pytest_cache/
+.ruff_cache/
+.coverage
+htmlcov/
+
+# Build and test artifacts
+build/
+dist/
+wheels/
+*.egg-info/
+tests/
+db/
+
+# Docker configuration is not application runtime content
+Dockerfile*
+**/Dockerfile*
+docker-compose*.yml
+compose*.yml
+.dockerignore
+**/.dockerignore
+
+# Documentation
+docs/
+README*
+
+# IDE and operating-system metadata
+.idea/
+.vscode/
+*.code-workspace
+.DS_Store

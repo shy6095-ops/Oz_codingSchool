@@ -1,7 +1,12 @@
 import json
 import os
 import subprocess
+import tomllib
 import unittest
+from pathlib import Path
+
+
+PROJECT_ROOT = Path(__file__).resolve().parents[1]
 
 
 class DockerComposeContractTests(unittest.TestCase):
@@ -42,8 +47,47 @@ class DockerComposeContractTests(unittest.TestCase):
         self.assertLess(migration_index, bootstrap_index)
         self.assertLess(bootstrap_index, server_index)
 
-        volume_targets = {volume["target"] for volume in fastapi["volumes"]}
-        self.assertEqual(
-            volume_targets,
-            {"/app/app", "/app/static", "/app/media"},
-        )
+        bind_mounts = [
+            volume for volume in fastapi["volumes"] if volume["type"] == "bind"
+        ]
+        self.assertEqual(len(bind_mounts), 1)
+        self.assertEqual(bind_mounts[0]["source"], str(PROJECT_ROOT))
+        self.assertEqual(bind_mounts[0]["target"], "/app")
+
+    def test_dockerignore_excludes_non_runtime_and_sensitive_paths(self) -> None:
+        root_ignore = PROJECT_ROOT / ".dockerignore"
+        assignment_ignore = PROJECT_ROOT / "app" / ".dockerignore"
+
+        self.assertTrue(root_ignore.is_file())
+        self.assertTrue(assignment_ignore.is_file())
+        self.assertEqual(root_ignore.read_text(), assignment_ignore.read_text())
+
+        patterns = {
+            line.strip()
+            for line in root_ignore.read_text().splitlines()
+            if line.strip() and not line.lstrip().startswith("#")
+        }
+        for required_pattern in {
+            ".env*",
+            "**/__pycache__/",
+            ".mypy_cache/",
+            "Dockerfile*",
+            "docker-compose*.yml",
+            "docs/",
+            "README*",
+            ".idea/",
+            ".vscode/",
+        }:
+            self.assertIn(required_pattern, patterns)
+
+    def test_python_package_metadata_only_references_build_context_files(self) -> None:
+        pyproject = tomllib.loads((PROJECT_ROOT / "pyproject.toml").read_text())
+
+        for package in pyproject["tool"]["setuptools"]["packages"]:
+            package_directory = PROJECT_ROOT.joinpath(*package.split("."))
+            self.assertTrue(
+                package_directory.is_dir(),
+                f"declared package directory is missing: {package}",
+            )
+
+        self.assertNotIn("readme", pyproject["project"])

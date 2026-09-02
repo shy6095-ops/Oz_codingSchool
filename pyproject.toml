@@ -2,7 +2,6 @@
 name = "ai-health-web-assignment"
 version = "0.1.0"
 description = "Add your description here"
-readme = "README.md"
 requires-python = ">=3.13"
 dependencies = [
     "alembic>=1.18.4",
@@ -34,7 +33,6 @@ packages = [
     "app.apis",
     "app.core",
     "app.core.db",
-    "app.models",
     "app.repositories",
     "app.schemas",
     "app.services",
