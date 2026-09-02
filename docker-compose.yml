@@ -4,10 +4,16 @@ services:
       context: .
       dockerfile: app/Dockerfile
     entrypoint: sh -c "uvicorn app.main:app --host 0.0.0.0 --port 8000 --reload"
+    env_file:
+      - .env
+    environment:
+      # 컨테이너 네트워크에서는 mysql 서비스명으로 접속해야 함 (.env의 DB_HOST=localhost는 로컬 실행용)
+      DB_HOST: mysql
     ports:
       - "8000:8000"
     volumes:
-      - ./app:/app
+      - .:/app
+      - /app/.venv
       - static_volume:/app/static
       - media_volume:/app/media
     healthcheck:

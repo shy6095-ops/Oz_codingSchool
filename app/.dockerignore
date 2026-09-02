@@ -1,0 +1,36 @@
+# env 파일
+.env
+.env.*
+!.env.example
+
+# 파이썬 캐시
+__pycache__/
+*.py[cod]
+*.egg-info/
+
+# 라이브러리 캐시 (mypy 등)
+.mypy_cache/
+.pytest_cache/
+.ruff_cache/
+.venv/
+
+# 도커 관련 설정 파일
+docker-compose.yml
+app/Dockerfile
+.dockerignore
+
+# docs (문서화 관련)
+docs/
+
+# README
+README.md
+
+# IDE 설정 파일
+.vscode/
+.idea/
+
+# 기타 버전관리 불필요 파일
+.git/
+.github/
+.DS_Store
+media/
