@@ -46,6 +46,10 @@ curl http://localhost:8000/healthcheck
 `docker compose up`(볼륨 마운트 있는 개발 환경)에서는 정상 동작했지만, 이는 `.:/app` 마운트가 호스트의 `worker/` 폴더까지 통째로 덮어써서 우연히 가려진 것이었습니다. Dockerfile이 `app/`만 이미지에 복사하고 있어서, AI 예측 로직(`app/services/prediction_service.py`가 `from worker.model import ...`로 참조)이 빠진 채였습니다. `docker run`으로 볼륨 마운트 없이 이미지 단독 실행해보니 즉시 `ModuleNotFoundError: No module named 'worker'`로 크래시하는 것을 확인했습니다.
 → Dockerfile에 `COPY worker ./worker` 추가 후, 볼륨 마운트 없는 단독 컨테이너로 재검증하여 정상 기동(healthcheck 200, `--workers 4`로 4개 프로세스 기동) 확인.
 
+### 3.6 `fastapi`가 MySQL의 healthcheck를 기다리지 않음
+`mysql` 서비스에 healthcheck가 정의되어 있었지만, `fastapi`의 `depends_on: - mysql`은 "컨테이너 프로세스가 시작됨"만 기다리는 단순 형태라 "MySQL이 실제로 연결을 받아들이는 상태"까지는 보장하지 않았습니다. mysql의 healthcheck는 최대 ~100초까지 걸릴 수 있어, 그 사이 fastapi가 먼저 뜨면 초기 요청이 DB 연결 실패로 튈 수 있는 레이스 컨디션이 있었습니다.
+→ `depends_on: mysql: condition: service_healthy`로 변경. `docker compose up` 로그에서 `mysql-1 Waiting` → `mysql-1 Healthy` → `fastapi-1 Starting` 순서로 정확히 대기하는 것을 확인했습니다.
+
 ---
 
 ## 4. 실행 화면 캡처

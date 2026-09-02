@@ -22,7 +22,8 @@ services:
       timeout: 5s
       retries: 3
     depends_on:
-      - mysql
+      mysql:
+        condition: service_healthy
 
   mysql:
     image: mysql:8.0
