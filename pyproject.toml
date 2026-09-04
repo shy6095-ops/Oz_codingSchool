@@ -4,7 +4,16 @@ version = "0.1.0"
 description = "Add your description here"
 readme = "README.md"
 requires-python = ">=3.13"
+# 공통 의존성 (fastapi 앱 / ai 워커 양쪽에서 필요)
 dependencies = [
+    "redis>=5.2.1",
+]
+
+# Stage 3: fastapi 앱과 ai 워커의 이미지 용량 최소화를 위해 의존성을 분리한다.
+#  - app: FastAPI 웹 계층 (torch 불필요)
+#  - ai : 폐렴 예측 워커 (fastapi/sqlalchemy 불필요, torch는 CPU wheel만)
+[project.optional-dependencies]
+app = [
     "alembic>=1.18.4",
     "asyncmy>=0.2.11",
     "bcrypt==4.0.1",
@@ -15,9 +24,12 @@ dependencies = [
     "pydantic[email]>=2.12.5",
     "pyjwt>=2.13.0",
     "sqlalchemy[asyncio]>=2.0.49",
+    "uuid6>=2025.0.1",
+]
+ai = [
     "torch>=2.13.0",
     "torchvision>=0.28.0",
-    "uuid6>=2025.0.1",
+    "pillow>=11.0.0",
 ]
 
 [dependency-groups]
@@ -25,6 +37,17 @@ dev = [
     "aiosqlite>=0.22.1",
     "pytest>=8.3.5",
 ]
+
+# torch/torchvision는 CPU 전용 wheel만 받아 이미지 용량을 크게 줄인다
+# (기본 인덱스는 CUDA 런타임까지 끌어와 이미지가 수 GB가 됨)
+[[tool.uv.index]]
+name = "pytorch-cpu"
+url = "https://download.pytorch.org/whl/cpu"
+explicit = true
+
+[tool.uv.sources]
+torch = { index = "pytorch-cpu" }
+torchvision = { index = "pytorch-cpu" }
 
 [tool.pytest.ini_options]
 pythonpath = ["."]

@@ -7,8 +7,11 @@ services:
     env_file:
       - .env
     environment:
-      # 컨테이너 네트워크에서는 mysql 서비스명으로 접속해야 함 (.env의 DB_HOST=localhost는 로컬 실행용)
+      # 컨테이너 네트워크에서는 서비스명/기본포트로 접속해야 함 (.env의 값은 로컬 uv 실행용).
+      # DB_PORT는 컨테이너 안에서 항상 3306. (.env의 DB_PORT는 호스트 포트 매핑에만 쓰임)
       DB_HOST: mysql
+      DB_PORT: "3306"
+      REDIS_URL: redis://redis:6379/0
     ports:
       - "8000:8000"
     volumes:
@@ -24,6 +27,41 @@ services:
     depends_on:
       mysql:
         condition: service_healthy
+      redis:
+        condition: service_healthy
+
+  # Stage 3 3-3: 폐렴 예측 전용 AI 워커 (fastapi 와 분리된 도커 서비스)
+  # fastapi 가 redis 큐에 넣은 task 를 꺼내 추론 후 결과를 pub/sub 으로 전달한다.
+  # docker compose up -d --scale ai-worker=3 으로 수평 확장 가능.
+  ai-worker:
+    build:
+      context: .
+      dockerfile: worker/Dockerfile
+    command: python -m worker.main
+    env_file:
+      - .env
+    environment:
+      REDIS_URL: redis://redis:6379/0
+    volumes:
+      # 예측할 X-ray 이미지를 fastapi 와 공유
+      - media_volume:/app/media
+    restart: unless-stopped
+    depends_on:
+      redis:
+        condition: service_healthy
+
+  # Stage 3 과제 1: Redis 컨테이너
+  redis:
+    image: redis:7-alpine
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis_volume:/data
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 5s
+      timeout: 3s
+      retries: 5
 
   mysql:
     image: mysql:8.0
@@ -47,3 +85,4 @@ volumes:
   mysql_volume:
   static_volume:
   media_volume:
+  redis_volume:
