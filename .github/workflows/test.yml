@@ -26,7 +26,9 @@ jobs:
           cache-dependency-glob: uv.lock
 
       - name: Install dependencies
-        run: uv sync --group dev --frozen
+        # Stage 3에서 의존성을 app/ai extra로 분리함.
+        # 테스트는 FastAPI 앱을 대상으로 하므로 app extra를 설치한다.
+        run: uv sync --extra app --group dev --frozen
 
       - name: Run tests
         run: uv run pytest -v

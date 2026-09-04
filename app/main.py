@@ -1,4 +1,5 @@
 import os
+from contextlib import asynccontextmanager
 from pathlib import Path
 
 from fastapi import FastAPI
@@ -8,8 +9,17 @@ from app.apis import practice_apis
 from app.apis.patient_apis import router as patient_router
 from app.apis.prediction_apis import router as prediction_router
 from app.apis.user_router import router as user_router
+from app.core.redis_client import close_redis
 
-app = FastAPI()
+
+@asynccontextmanager
+async def lifespan(app: FastAPI):
+    yield
+    # 앱 종료 시 Redis 커넥션 정리
+    await close_redis()
+
+
+app = FastAPI(lifespan=lifespan)
 app.include_router(practice_apis.router)
 app.include_router(user_router)
 app.include_router(patient_router)
