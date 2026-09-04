@@ -1,5 +1,30 @@
-<<<<<<< HEAD
 # AI Health Web Assignment
+
+흉부 X-ray 이미지로 폐렴 여부를 예측하고 환자 정보를 관리하는
+FastAPI 기반 웹 서비스입니다. (오즈코딩스쿨 팀 프로젝트)
+
+## 아키텍처
+
+| 서비스 | 역할 |
+|--------|------|
+| `fastapi` | 환자 관리 / 인증 API. 예측 요청을 Redis 큐에 적재 |
+| `ai-worker` | 큐에서 X-ray 추론 작업을 꺼내 PyTorch(CPU)로 폐렴 예측 후 pub/sub 으로 결과 반환. `--scale ai-worker=3` 으로 수평 확장 |
+| `mysql` | 환자·예측 데이터 (SQLAlchemy + Alembic) |
+| `redis` | 작업 큐 및 결과 전달 |
+
+이미지 용량을 줄이기 위해 웹 계층(`app`)과 AI 워커(`ai`)의 의존성을 분리합니다.
+
+## 실행
+
+```bash
+cp .env.example .env
+docker compose up --build
+
+# AI 워커 수평 확장
+docker compose up -d --scale ai-worker=3
+```
+
+API 문서: http://localhost:8000/docs
 
 ## Alembic Migration Guide
 
@@ -22,6 +47,3 @@ uv run alembic upgrade head
 ```bash
 uv run alembic downgrade -1
 ```
-=======
-# 0z_codingSchool
->>>>>>> 865e8a9da866084088d47915feb1ba5bc6568c0e
