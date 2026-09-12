@@ -1,5 +1,0 @@
-fastapi[standard]>=0.115.0
-uvicorn>=0.30.0
-sqlalchemy[asyncio]>=2.0.30
-asyncmy>=0.2.9
-redis>=5.0.0
