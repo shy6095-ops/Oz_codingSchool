@@ -1,0 +1,30 @@
+# ── 챌린저 66: docker-compose.yml 기본형 ──
+# docker run 에 붙던 긴 옵션들을 파일로 선언해두고 재현 가능하게 만든다.
+services:
+  api:
+    # build : 이미지를 직접 빌드한다. (image: 를 쓰면 레지스트리에서 받아옴)
+    build:
+      context: .            # 빌드 컨텍스트 = 현재 폴더
+      dockerfile: Dockerfile
+    image: challenger66-api:1.0
+    container_name: challenger66-api
+
+    # ports : "호스트포트:컨테이너포트"
+    ports:
+      - "8000:8000"
+
+    # environment : 컨테이너에 주입할 환경변수
+    environment:
+      APP_ENV: docker-compose
+      APP_MESSAGE: "docker compose 로 띄운 서비스입니다."
+
+    # healthcheck : 컨테이너가 정상인지 주기적으로 확인한다.
+    healthcheck:
+      test: ["CMD-SHELL", "python -c \"import urllib.request;urllib.request.urlopen('http://localhost:8000/healthcheck')\""]
+      interval: 10s
+      timeout: 3s
+      retries: 3
+      start_period: 5s
+
+    # restart : 컨테이너가 죽으면 다시 띄운다. (수동 stop 은 제외)
+    restart: unless-stopped

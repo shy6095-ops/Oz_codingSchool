@@ -3,317 +3,503 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>한승수 이력서</title>
+    <title>한승수 | 이력서</title>
     <link rel="stylesheet" href="resume_style.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
 <body>
-  <nav class="sidebar">
-    <div class="sidebar-container">
-      <p class="sidebar-name">한승수<span>Hans</span></p>
-      <ul class="sidebar-menu">
-        <li><a href="#resume">이력서</a></li>
-        <li><a href="#introduce">소개</a></li>
-        <li><a href="#skills">스킬</a></li>
-        <li><a href="#experience">경력</a></li>
-        <li><a href="#projects">주요 과제</a></li>
+
+<nav>
+    <a href="#top" class="logo">한승수</a>
+    <ul>
+        <li><a href="#about">소개</a></li>
         <li><a href="#education">학력</a></li>
-        <li><a href="#certifications">자격증</a></li>
-      </ul>
+        <li><a href="#experience">경력</a></li>
+        <li><a href="#projects">프로젝트</a></li>
+        <li><a href="#skills">스킬</a></li>
+        <li><a href="#certs">자격증</a></li>
+        <li><a href="#contact">연락처</a></li>
+    </ul>
+</nav>
+
+<!-- ── HERO ── -->
+<header class="hero" id="top">
+    <div class="hero-text">
+        <span class="badge">Public Policy × Healthcare × AI</span>
+        <h1>데이터로 근거를 만들고,<br><span>돌봄의 현장</span>을<br>서비스로 잇습니다</h1>
+        <p>
+            정부·공공 연구과제를 10년간 설계하고 운영해 온 연구자입니다.
+            지금은 요양·복지 현장 경험을 AI 헬스케어 서비스로 구현하고 있습니다.
+        </p>
+        <div class="cta">
+            <a class="btn btn-primary" href="#contact">연락하기</a>
+            <a class="btn btn-outline" href="#experience">경력 보기</a>
+            <a class="btn btn-outline" href="#projects">프로젝트 보기</a>
+        </div>
     </div>
-  </nav>
 
-  <div id="resume" class="container">
-    <main>
-      <section id="resume-header">
-        <div class="header-content">
-          <div class="header-text">
-            <h1>한승수</h1>
-            <p class="tagline">정책연구 &middot; 공공과제 10년 &rarr; AI 헬스케어 서비스 기획</p>
-            <!-- 실제 연락처로 수정해서 제출하세요 -->
-            <span><i class="fa-solid fa-mobile-screen"></i>&nbsp;010-0000-0000</span>
-            <span><i class="fa-solid fa-at"></i>&nbsp;hans@example.com</span>
-            <span><i class="fa-solid fa-house"></i>&nbsp;서울특별시</span>
-            <span><i class="fa-solid fa-heart-pulse"></i>&nbsp;사회복지 &middot; AI &middot; 실버산업 &middot; 헬스케어</span>
-          </div>
-          <div class="profile-photo">
+    <aside class="hero-card">
+        <div class="hero-photo">
             <img src="profile.jpg" alt="한승수 증명사진">
-          </div>
         </div>
-      </section>
+        <p class="hero-name">한승수 <span>Hans</span></p>
+        <p class="hero-sub">176cm · 72kg · A형 · INTP</p>
+        <div class="hero-tags">
+            <span class="hero-tag">정책연구</span>
+            <span class="hero-tag">데이터 분석</span>
+            <span class="hero-tag">헬스케어</span>
+        </div>
+    </aside>
+</header>
 
-      <section id="introduce">
-        <h2>Introduce</h2>
+<!-- ── 희망 직무 ── -->
+<section id="role">
+    <p class="section-label">Desired Role</p>
+    <h2 class="section-title">희망 직무</h2>
+    <div class="profile-cards">
+        <article class="profile-card">
+            <div class="pc-icon">🩺</div>
+            <h3>헬스케어 서비스 기획</h3>
+            <p>돌봄 현장에서 확인한 문제를 서비스 요구사항으로 정리합니다.</p>
+            <div class="pc-tags">
+                <span class="pc-tag">요구사항 정의</span>
+                <span class="pc-tag">현장 리서치</span>
+            </div>
+        </article>
+        <article class="profile-card">
+            <div class="pc-icon">📊</div>
+            <h3>정책 · 데이터 분석</h3>
+            <p>대규모 조사 설계와 지표 분석으로 의사결정 근거를 만듭니다.</p>
+            <div class="pc-tags">
+                <span class="pc-tag">AHP</span>
+                <span class="pc-tag">성과관리</span>
+            </div>
+        </article>
+        <article class="profile-card">
+            <div class="pc-icon">⚙️</div>
+            <h3>AI 서비스 개발</h3>
+            <p>FastAPI·Docker 기반으로 모델을 실제 서비스로 배포합니다.</p>
+            <div class="pc-tags">
+                <span class="pc-tag">Python</span>
+                <span class="pc-tag">FastAPI</span>
+            </div>
+        </article>
+    </div>
+</section>
+
+<!-- ── 소개 ── -->
+<section id="about">
+    <p class="section-label">About</p>
+    <h2 class="section-title">소개</h2>
+
+    <div class="about-lead">
         <p>
-          국토해양부 물류표준화(5년 &middot; 37억), 경기도민 삶의 질 조사(2만명 &middot; 10억) 등
-          대형 정부 정책과제를 실무로 설계하고 운영해 온 연구자입니다.
-          AHP &middot; 성과관리 &middot; 대규모 설문 분석을 다루며 데이터로 근거를 만드는 일에 익숙합니다.
+            국토해양부 물류표준화(5년 · 37억), 경기도민 삶의 질 조사(2만명 · 10억) 등
+            대형 국가과제를 실무로 설계하고 운영했습니다.
+            AHP, 성과관리 체계, 대규모 설문 분석을 다루며 숫자로 결론을 만드는 일에 익숙합니다.
         </p>
         <p>
-          2020년 이후 요양보호사 &middot; 병원동행매니저 &middot; 사회복지사 자격을 취득하며 돌봄 현장을 직접 익혔고,
-          지금은 그 현장 감각을 AI 헬스케어 서비스로 구현하는 개발 역량을 쌓고 있습니다.
-          말로 설득하기보다 자료와 수치로 결론을 먼저 정리하는 방식을 선호합니다.
+            2020년 이후에는 요양보호사·병원동행매니저·사회복지사 자격을 취득하며 돌봄 현장을 직접 익혔고,
+            그 경험을 AI 헬스케어 서비스로 구현하기 위해 개발 역량을 쌓고 있습니다.
         </p>
-        <div class="profile-meta">
-          <span><strong>MBTI</strong> ENTJ(20대) &rarr; INTJ(30대) &rarr; INTP(40대)</span>
-          <span><strong>취미</strong> 독서 &middot; OTT</span>
-          <span><strong>공연</strong> 연극 &middot; 뮤지컬 &middot; 콘서트 500회 이상</span>
-        </div>
-      </section>
+    </div>
 
-      <section id="skills">
-        <h2>Skills</h2>
-        <div class="skills-group">
-          <h3>정책 &middot; 연구</h3>
-          <div class="skills-container">
-            <span class="skill-tag">AHP 분석</span>
-            <span class="skill-tag">성과관리 체계 설계</span>
-            <span class="skill-tag">대규모 설문 조사</span>
-            <span class="skill-tag">정책보고서 작성</span>
-            <span class="skill-tag">경영평가</span>
-          </div>
-        </div>
-        <div class="skills-group">
-          <h3>AI &middot; 개발</h3>
-          <div class="skills-container">
-            <span class="skill-tag">Python</span>
-            <span class="skill-tag">FastAPI</span>
-            <span class="skill-tag">HTML / CSS</span>
-            <span class="skill-tag">JavaScript</span>
-            <span class="skill-tag">Docker</span>
-            <span class="skill-tag">머신러닝 / 딥러닝</span>
-          </div>
-        </div>
-        <div class="skills-group">
-          <h3>헬스케어 &middot; 복지 현장</h3>
-          <div class="skills-container">
-            <span class="skill-tag">요양보호</span>
-            <span class="skill-tag">병원동행</span>
-            <span class="skill-tag">사회복지 실무</span>
-            <span class="skill-tag">건강가정 상담</span>
-          </div>
-        </div>
-      </section>
-
-      <section id="experience">
-        <h2>Experience</h2>
-
-        <div class="experience-item">
-          <div class="experience-info">
-            <span class="company">경기연구원</span>
-            <span class="period">2016 ~ 2017</span>
-          </div>
-          <div class="role">
-            <span class="position">연구원</span>
-            <span class="rank">연구기획본부 정책분석부</span>
-          </div>
-          <div class="project">
-            <div class="project-header">
-              <span class="project-name">경기도민 삶의 질 조사 (경기도청)</span>
-              <span class="project-period">1년 &middot; 10억원</span>
+    <div class="about-grid">
+        <div class="about-card">
+            <h3>Interests</h3>
+            <p>독서와 OTT로 입력을 채우고, 공연으로 감각을 유지합니다.</p>
+            <div class="about-chips">
+                <span class="chip">독서</span>
+                <span class="chip">OTT</span>
+                <span class="chip chip-accent">공연 관람 500회+</span>
+                <span class="chip">연극</span>
+                <span class="chip">뮤지컬</span>
+                <span class="chip">콘서트</span>
             </div>
-            <ul class="details">
-              <li>도민 2만명 규모 설문 설계 &middot; 표본 관리 &middot; 품질 검증 실무 수행</li>
-              <li>삶의 질 지표 동태분석 프레임 설계 및 기초연구 보고서 집필</li>
-              <li>다문화가정 미취학 아동 지원방안 연구 수행 및 정책 제언 도출</li>
-            </ul>
-          </div>
         </div>
-
-        <div class="experience-item">
-          <div class="experience-info">
-            <span class="company">서울대학교 공학연구소 / 건설환경종합연구소</span>
-            <span class="period">2008 ~ 2011</span>
-          </div>
-          <div class="role">
-            <span class="position">연구원</span>
-            <span class="rank">정책과제 수행</span>
-          </div>
-          <div class="project">
-            <div class="project-header">
-              <span class="project-name">물류표준화 정책과제 (국토해양부)</span>
-              <span class="project-period">5년 &middot; 37억원</span>
+        <div class="about-card">
+            <h3>Sports</h3>
+            <p>몸으로 익힌 것은 오래 남는다고 생각합니다.</p>
+            <div class="about-chips">
+                <span class="chip">태권도 2단</span>
+                <span class="chip">스킨스쿠버</span>
             </div>
-            <ul class="details">
-              <li>국가 물류표준 체계 수립을 위한 실태조사 및 해외사례 분석</li>
-              <li>다년도 대형과제의 연차별 실적 관리 및 발주처 보고 대응</li>
-            </ul>
-          </div>
         </div>
+        <div class="about-card">
+            <h3>Strengths</h3>
+            <p>
+                결론과 구조를 먼저 세우고 근거를 붙이는 방식으로 일합니다.
+                분석형(INTP) 성향이 강해 자료·수치로 설득하는 데 강점이 있습니다.
+            </p>
+        </div>
+        <div class="about-card">
+            <h3>Working On</h3>
+            <p>
+                말보다 자료가 앞서는 편이어서, 결론을 전달하는 속도를 조절하고
+                맥락을 먼저 공유하는 커뮤니케이션을 의식적으로 연습하고 있습니다.
+            </p>
+        </div>
+    </div>
+</section>
 
-        <div class="experience-item">
-          <div class="experience-info">
-            <span class="company">한국문화관광연구원</span>
-            <span class="period">2018</span>
-          </div>
-          <div class="role">
-            <span class="position">연구원</span>
-            <span class="rank">문화관광부 수탁과제</span>
-          </div>
-          <div class="project">
-            <div class="project-header">
-              <span class="project-name">제주도 축제 활성화 방안</span>
-              <span class="project-period">6개월 &middot; 5천만원</span>
+<!-- ── 학력 ── -->
+<section id="education">
+    <p class="section-label">Education</p>
+    <h2 class="section-title">학력</h2>
+    <div class="timeline">
+        <div class="tl-item">
+            <div class="tl-year">2015 – 2017</div>
+            <div class="tl-content">
+                <h4>가톨릭대학교 대학원 행정학과</h4>
+                <p>박사 수료</p>
+                <span class="tl-tag">행정학</span>
             </div>
-            <ul class="details">
-              <li>지역 축제 운영 실태 진단 및 방문객 만족도 분석</li>
-              <li>축제 활성화 실행과제 도출 및 최종보고서 작성</li>
-            </ul>
-          </div>
         </div>
-
-        <div class="experience-item">
-          <div class="experience-info">
-            <span class="company">서울시청 / 서울에너지공사</span>
-            <span class="period">2019 ~ 2020</span>
-          </div>
-          <div class="role">
-            <span class="position">뉴딜일자리</span>
-            <span class="rank">공공 행정 &middot; 사업지원</span>
-          </div>
-          <div class="project">
-            <div class="project-header">
-              <span class="project-name">공공기관 사업지원 및 행정 실무</span>
-              <span class="project-period">2019 ~ 2020</span>
+        <div class="tl-item">
+            <div class="tl-year">2013 – 2015</div>
+            <div class="tl-content">
+                <h4>가톨릭대학교 대학원 행정학과</h4>
+                <p>석사 졸업 · 학위논문 「KOICA 개발협력사업 성과관리 개선방안 연구」</p>
+                <span class="tl-tag blue">AHP 분석</span>
             </div>
-            <ul class="details">
-              <li>사업 데이터 정리 &middot; 통계 산출 &middot; 내부 보고자료 작성</li>
-            </ul>
-          </div>
         </div>
-
-        <div class="experience-item">
-          <div class="experience-info">
-            <span class="company">민간 연구원 (전략기술경영연구원 &middot; 한국경제경영연구원)</span>
-            <span class="period">2014 ~ 2015</span>
-          </div>
-          <div class="role">
-            <span class="position">연구원</span>
-            <span class="rank">수탁 연구 &middot; 컨설팅</span>
-          </div>
-          <div class="project">
-            <div class="project-header">
-              <span class="project-name">공공기관 경영 &middot; 전략 수탁과제</span>
-              <span class="project-period">2014 ~ 2015</span>
+        <div class="tl-item">
+            <div class="tl-year">2001 – 2008</div>
+            <div class="tl-content">
+                <h4>광운대학교</h4>
+                <p>법학과 · 경영학 복수전공 · 학사 졸업</p>
+                <span class="tl-tag">법학</span>
+                <span class="tl-tag">경영학</span>
             </div>
-            <ul class="details">
-              <li>한국원자력통제기술원 중장기 발전전략 보완 및 경영선진화 계획수립 용역</li>
-              <li>서울대학교 산학협력단 경영평가 프로젝트</li>
-              <li>BMW 물류창고 개선 프로젝트</li>
-            </ul>
-          </div>
         </div>
-      </section>
+    </div>
+</section>
 
-      <section id="projects">
-        <h2>Research &amp; Publication</h2>
-
-        <h3 class="sub-title">학위논문</h3>
-        <table class="education-table">
-          <tr>
-            <th>2015</th>
-            <td>
-              한국국제협력단(KOICA)의 개발협력사업 성과관리 개선방안 연구
-              <span class="note">AHP 분석을 이용한 성과관리를 중심으로 &middot; 가톨릭대학교 행정학과 석사학위논문</span>
-            </td>
-          </tr>
-        </table>
-
-        <h3 class="sub-title">학술지</h3>
-        <table class="education-table">
-          <tr>
-            <th>2015</th>
-            <td>
-              AHP를 이용한 한국국제협력단(KOICA)사업 성과관리 개선방안
-              <span class="note">경운대학교 새마을연구소, 제11권 1호</span>
-            </td>
-          </tr>
-          <tr>
-            <th>2017</th>
-            <td>
-              다문화가족의 미취학 자녀 교육지원방안 연구
-              <span class="note">경기도 다문화유치원을 중심으로 &middot; 가톨릭대학교 정부혁신생산성연구소, 제9권 2호</span>
-            </td>
-          </tr>
-        </table>
-
-        <h3 class="sub-title">정책연구보고서</h3>
-        <table class="education-table">
-          <tr>
-            <th>2015</th>
-            <td>경기도민 삶의 질 동태분석을 위한 기초 연구<span class="note">경기연구원</span></td>
-          </tr>
-          <tr>
-            <th>2015</th>
-            <td>경기도 다문화가정 미취학 아동 지원방안 연구<span class="note">경기연구원</span></td>
-          </tr>
-        </table>
-      </section>
-
-      <section id="education">
-        <h2>Education</h2>
-        <table class="education-table">
-          <tr>
-            <th>2015 ~ 2017</th>
-            <td>가톨릭대학교 대학원 행정학과<span class="note">박사 수료</span></td>
-          </tr>
-          <tr>
-            <th>2013 ~ 2015</th>
-            <td>가톨릭대학교 대학원 행정학과<span class="note">석사 졸업</span></td>
-          </tr>
-          <tr>
-            <th>2001 ~ 2008</th>
-            <td>광운대학교 법학과 / 경영학 복수전공<span class="note">학사 졸업</span></td>
-          </tr>
-        </table>
-
-        <h2>Awards</h2>
-        <table class="education-table">
-          <tr>
-            <th>2008</th>
-            <td>전국 대학생 정책공모전 입상<span class="note">여의도연구소</span></td>
-          </tr>
-          <tr>
-            <th>2007</th>
-            <td>전국 보훈학술논문 공모전 입상<span class="note">국가보훈처</span></td>
-          </tr>
-        </table>
-      </section>
-
-      <section id="certifications">
-        <h2>Certifications</h2>
-
-        <h3 class="sub-title">헬스케어 &middot; 복지</h3>
-        <table class="education-table">
-          <tr><th>2026</th><td>심폐소생술 교육 수료증</td></tr>
-          <tr><th>2026</th><td>건강가정사</td></tr>
-          <tr><th>2026</th><td>사회복지사 2급</td></tr>
-          <tr><th>2024</th><td>병원동행매니저</td></tr>
-          <tr><th>2024</th><td>요양보호사</td></tr>
-        </table>
-
-        <h3 class="sub-title">경영 &middot; 일반</h3>
-        <table class="education-table">
-          <tr><th>2018</th><td>건설업 기초안전보건교육 이수</td></tr>
-          <tr><th>2014</th><td>R&amp;D 프로젝트 관리 전문가 3급</td></tr>
-          <tr><th>2014</th><td>R&amp;D 전략기획 전문가 3급</td></tr>
-          <tr><th>2012</th><td>운전면허 1종 대형 / 1종 보통</td></tr>
-          <tr><th>2007</th><td>공인구매자재관리사</td></tr>
-          <tr><th>2007</th><td>워드프로세서 1급</td></tr>
-          <tr><th>2005</th><td>유통관리사 2급</td></tr>
-        </table>
-
-        <h3 class="sub-title">기타</h3>
-        <div class="skills-container">
-          <span class="skill-tag">태권도 2단</span>
-          <span class="skill-tag">스킨스쿠버</span>
+<!-- ── 경력 ── -->
+<section id="experience">
+    <p class="section-label">Experience</p>
+    <h2 class="section-title">경력</h2>
+    <div class="timeline">
+        <div class="tl-item">
+            <div class="tl-year">2020</div>
+            <div class="tl-content">
+                <h4>서울에너지공사</h4>
+                <p>사업 데이터 정리와 통계 산출, 내부 보고자료 작성</p>
+                <span class="tl-tag">뉴딜일자리</span>
+            </div>
         </div>
-      </section>
+        <div class="tl-item">
+            <div class="tl-year">2019</div>
+            <div class="tl-content">
+                <h4>서울시청</h4>
+                <p>행정 실무 및 사업 지원</p>
+                <span class="tl-tag">뉴딜일자리</span>
+            </div>
+        </div>
+        <div class="tl-item">
+            <div class="tl-year">2018</div>
+            <div class="tl-content">
+                <h4>한국문화관광연구원</h4>
+                <p>지역 축제 운영 실태 진단과 방문객 만족도 분석</p>
+                <span class="tl-tag">연구원</span>
+            </div>
+        </div>
+        <div class="tl-item">
+            <div class="tl-year">2016 – 2017</div>
+            <div class="tl-content">
+                <h4>경기연구원 연구기획본부 정책분석부</h4>
+                <p>도민 2만명 규모 조사 설계·표본 관리·품질 검증, 삶의 질 지표 동태분석</p>
+                <span class="tl-tag blue">대표 경력</span>
+                <span class="tl-tag">연구원</span>
+            </div>
+        </div>
+        <div class="tl-item">
+            <div class="tl-year">2015</div>
+            <div class="tl-content">
+                <h4>(주)한국경제경영연구원</h4>
+                <p>공공기관 경영·전략 수탁 연구</p>
+                <span class="tl-tag">연구원</span>
+            </div>
+        </div>
+        <div class="tl-item">
+            <div class="tl-year">2014</div>
+            <div class="tl-content">
+                <h4>(주)전략기술경영연구원</h4>
+                <p>기술경영·R&amp;D 기획 연구</p>
+                <span class="tl-tag">연구원</span>
+            </div>
+        </div>
+        <div class="tl-item">
+            <div class="tl-year">2009 – 2011</div>
+            <div class="tl-content">
+                <h4>서울대학교 건설환경종합연구소</h4>
+                <p>국가 물류표준 체계 수립 실태조사 및 해외사례 분석</p>
+                <span class="tl-tag">연구원</span>
+            </div>
+        </div>
+        <div class="tl-item">
+            <div class="tl-year">2008 – 2009</div>
+            <div class="tl-content">
+                <h4>서울대학교 공학연구소</h4>
+                <p>다년도 대형과제의 연차별 실적 관리 및 발주처 보고 대응</p>
+                <span class="tl-tag">연구원</span>
+            </div>
+        </div>
+    </div>
 
-      <footer class="resume-footer">
-        <p>YBM 어학원 영어 조교 &middot; 대학원 조교 &middot; 대학 재학 중 세일즈 &middot; 행사요원 &middot; 보안요원 등 다양한 현장 경험</p>
-      </footer>
-    </main>
-  </div>
+    <div class="side-note">
+        <h4>그 외 경험</h4>
+        <p>YBM 어학원 영어 조교 · 대학원 조교 · 대학 재학 중 세일즈, 행사요원, 보안요원 등 다양한 현장 근무</p>
+    </div>
+</section>
+
+<!-- ── 프로젝트 ── -->
+<section id="projects">
+    <p class="section-label">Projects</p>
+    <h2 class="section-title">주요 프로젝트</h2>
+    <div class="project-grid">
+        <article class="project-card">
+            <div class="project-body">
+                <p class="project-meta">국토해양부 · 서울대 공학연구소</p>
+                <h3 class="project-card-title">국가 물류표준화 체계 수립</h3>
+                <p class="project-desc">
+                    국가 물류표준 체계 수립을 위한 실태조사와 해외사례 분석을 담당했습니다.
+                    다년도 대형과제의 연차 실적 관리와 발주처 보고를 함께 맡았습니다.
+                </p>
+                <div class="project-stats">
+                    <span class="stat"><strong>5년</strong>기간</span>
+                    <span class="stat"><strong>37억</strong>사업비</span>
+                </div>
+            </div>
+        </article>
+
+        <article class="project-card">
+            <div class="project-body">
+                <p class="project-meta">경기도청 · 경기연구원</p>
+                <h3 class="project-card-title">경기도민 삶의 질 조사</h3>
+                <p class="project-desc">
+                    도민 2만명 규모 설문의 설계·표본 관리·품질 검증을 수행하고,
+                    삶의 질 지표 동태분석 프레임을 설계했습니다.
+                </p>
+                <div class="project-stats">
+                    <span class="stat"><strong>2만명</strong>표본</span>
+                    <span class="stat"><strong>10억</strong>사업비</span>
+                </div>
+            </div>
+        </article>
+
+        <article class="project-card">
+            <div class="project-body">
+                <p class="project-meta">문화관광부 · 한국문화관광연구원</p>
+                <h3 class="project-card-title">제주도 축제 활성화 방안</h3>
+                <p class="project-desc">
+                    지역 축제 운영 실태를 진단하고 방문객 만족도를 분석해
+                    실행과제를 도출했습니다.
+                </p>
+                <div class="project-stats">
+                    <span class="stat"><strong>6개월</strong>기간</span>
+                    <span class="stat"><strong>5천만</strong>사업비</span>
+                </div>
+            </div>
+        </article>
+
+        <article class="project-card">
+            <div class="project-body">
+                <p class="project-meta">경기도청 · 경기연구원</p>
+                <h3 class="project-card-title">다문화가정 미취학 아동 지원방안</h3>
+                <p class="project-desc">
+                    경기도 다문화유치원을 중심으로 교육지원 실태를 분석하고
+                    정책 제언을 도출해 학술지에 게재했습니다.
+                </p>
+                <div class="project-stats">
+                    <span class="stat"><strong>2015</strong>수행</span>
+                    <span class="stat"><strong>학술지</strong>게재</span>
+                </div>
+            </div>
+        </article>
+    </div>
+
+    <div class="side-note">
+        <h4>프리랜서 참여</h4>
+        <p>
+            한국원자력통제기술원 중장기 발전전략 및 경영선진화 계획수립 용역 ·
+            서울대학교 산학협력단 경영평가 · BMW 물류창고 개선 프로젝트 <span class="muted-inline">(2015)</span>
+        </p>
+    </div>
+</section>
+
+<!-- ── 스킬 ── -->
+<section id="skills">
+    <p class="section-label">Skills</p>
+    <h2 class="section-title">기술 스택</h2>
+    <div class="skill-groups">
+        <div class="skill-group">
+            <h3>정책 · 연구</h3>
+            <div class="skill-tags">
+                <span class="skill-tag">AHP 분석</span>
+                <span class="skill-tag">성과관리 체계 설계</span>
+                <span class="skill-tag">대규모 설문 조사</span>
+                <span class="skill-tag">정책보고서 작성</span>
+                <span class="skill-tag">경영평가</span>
+            </div>
+        </div>
+        <div class="skill-group">
+            <h3>개발 · AI</h3>
+            <div class="skill-tags">
+                <span class="skill-tag">Python</span>
+                <span class="skill-tag">FastAPI</span>
+                <span class="skill-tag">SQL</span>
+                <span class="skill-tag">HTML / CSS</span>
+                <span class="skill-tag">JavaScript</span>
+                <span class="skill-tag">Docker</span>
+                <span class="skill-tag">Git / GitHub</span>
+                <span class="skill-tag">머신러닝 · 딥러닝</span>
+            </div>
+        </div>
+        <div class="skill-group">
+            <h3>헬스케어 · 복지 현장</h3>
+            <div class="skill-tags">
+                <span class="skill-tag">요양보호</span>
+                <span class="skill-tag">병원동행</span>
+                <span class="skill-tag">사회복지 실무</span>
+                <span class="skill-tag">건강가정 상담</span>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- ── 자격증 ── -->
+<section id="certs">
+    <p class="section-label">Certifications</p>
+    <h2 class="section-title">자격증</h2>
+
+    <h3 class="sub-head">헬스케어 · 복지</h3>
+    <div class="cert-grid">
+        <div class="cert-card">
+            <div class="cert-icon">🫀</div>
+            <h4>심폐소생술 교육 수료</h4>
+            <p>2026</p>
+        </div>
+        <div class="cert-card">
+            <div class="cert-icon">🏠</div>
+            <h4>건강가정사</h4>
+            <p>2026</p>
+        </div>
+        <div class="cert-card">
+            <div class="cert-icon">🤝</div>
+            <h4>사회복지사 2급</h4>
+            <p>2026</p>
+        </div>
+        <div class="cert-card">
+            <div class="cert-icon">🚑</div>
+            <h4>병원동행매니저</h4>
+            <p>2024</p>
+        </div>
+        <div class="cert-card">
+            <div class="cert-icon">🧑‍⚕️</div>
+            <h4>요양보호사</h4>
+            <p>2024</p>
+        </div>
+    </div>
+
+    <h3 class="sub-head">경영 · 일반</h3>
+    <div class="cert-grid">
+        <div class="cert-card">
+            <div class="cert-icon">🦺</div>
+            <h4>건설업 기초안전보건교육</h4>
+            <p>2018</p>
+        </div>
+        <div class="cert-card">
+            <div class="cert-icon">📐</div>
+            <h4>R&amp;D 프로젝트 관리 전문가 3급</h4>
+            <p>2014</p>
+        </div>
+        <div class="cert-card">
+            <div class="cert-icon">🧪</div>
+            <h4>R&amp;D 전략기획 전문가 3급</h4>
+            <p>2014</p>
+        </div>
+        <div class="cert-card">
+            <div class="cert-icon">🚚</div>
+            <h4>운전면허 1종 대형 · 보통</h4>
+            <p>2012</p>
+        </div>
+        <div class="cert-card">
+            <div class="cert-icon">📦</div>
+            <h4>공인구매자재관리사</h4>
+            <p>2007</p>
+        </div>
+        <div class="cert-card">
+            <div class="cert-icon">⌨️</div>
+            <h4>워드프로세서 1급</h4>
+            <p>2007</p>
+        </div>
+        <div class="cert-card">
+            <div class="cert-icon">🏪</div>
+            <h4>유통관리사 2급</h4>
+            <p>2005</p>
+        </div>
+    </div>
+</section>
+
+<!-- ── 연구실적 · 수상 ── -->
+<section id="awards">
+    <p class="section-label">Research &amp; Awards</p>
+    <h2 class="section-title">연구실적 · 수상</h2>
+
+    <h3 class="sub-head">학술지</h3>
+    <div class="award-list">
+        <div class="award-item">
+            <h4>다문화가족의 미취학 자녀 교육지원방안 연구</h4>
+            <p>경기도 다문화유치원을 중심으로 · 가톨릭대학교 정부혁신생산성연구소 제9권 2호 · 2017</p>
+        </div>
+        <div class="award-item">
+            <h4>AHP를 이용한 한국국제협력단(KOICA)사업 성과관리 개선방안</h4>
+            <p>경운대학교 새마을연구소 제11권 1호 · 2015</p>
+        </div>
+    </div>
+
+    <h3 class="sub-head">정책연구보고서</h3>
+    <div class="award-list">
+        <div class="award-item">
+            <h4>경기도민 삶의 질 동태분석을 위한 기초 연구</h4>
+            <p>경기연구원 · 2015</p>
+        </div>
+        <div class="award-item">
+            <h4>경기도 다문화가정 미취학 아동 지원방안 연구</h4>
+            <p>경기연구원 · 2015</p>
+        </div>
+    </div>
+
+    <h3 class="sub-head">수상</h3>
+    <div class="award-list">
+        <div class="award-item">
+            <h4>전국 대학생 정책공모전 입상</h4>
+            <p>여의도연구소 · 2008</p>
+        </div>
+        <div class="award-item">
+            <h4>전국 보훈학술논문 공모전 입상</h4>
+            <p>국가보훈처 · 2007</p>
+        </div>
+    </div>
+</section>
+
+<!-- ── 연락처 ── -->
+<section id="contact">
+    <p class="section-label">Contact</p>
+    <h2 class="section-title">연락처</h2>
+    <div class="contact-box">
+        <p>정책 데이터와 돌봄 현장을 함께 아는 사람이 필요하시면 언제든 연락 주세요.</p>
+        <div class="contact-links">
+            <!-- 전화번호 자릿수 확인 필요 -->
+            <a class="btn btn-primary" href="tel:01058906592">📞 010-5890-6592</a>
+            <a class="btn btn-outline" href="mailto:hanbiho1023@gmail.com">✉️ hanbiho1023@gmail.com</a>
+        </div>
+    </div>
+</section>
+
+<footer>
+    <p>© 2026 한승수 · Hans</p>
+</footer>
+
 </body>
 </html>
