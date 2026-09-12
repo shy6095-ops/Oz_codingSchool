@@ -3,297 +3,1360 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>한승수 이력서 v2</title>
+    <title>한승수 | 이력서 v2</title>
+    <style>
+/* ===========================================================
+   챌린저 54 - HTML/CSS 3일차
+   CSS 변수 · Flexbox · Grid · sticky · 반응형 · 인쇄 스타일
+   =========================================================== */
+
+/* ── 디자인 토큰 ── */
+:root {
+    --bg: #f9f9f7;
+    --surface: #ffffff;
+    --accent: #2563eb;
+    --accent-dark: #1d4ed8;
+    --accent-light: #eff6ff;
+    --text: #1a1a1a;
+    --muted: #6b7280;
+    --border: #e5e7eb;
+    --tag-bg: #f3f4f6;
+    --max: 860px;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Pretendard', -apple-system, BlinkMacSystemFont,
+                 'Apple SD Gothic Neo', 'Noto Sans KR', 'Malgun Gothic', sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    line-height: 1.7;
+    -webkit-font-smoothing: antialiased;
+}
+
+a {
+    color: inherit;
+    text-decoration: none;
+}
+
+/* ── 네비게이션 (sticky) ── */
+nav {
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    height: 56px;
+    padding: 0 2rem;
+    background: rgba(249, 249, 247, 0.85);
+    backdrop-filter: blur(10px);
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+nav .logo {
+    font-weight: 700;
+    font-size: 1.1rem;
+    letter-spacing: -0.5px;
+}
+
+nav ul {
+    list-style: none;
+    display: flex;
+    gap: 1.4rem;
+}
+
+nav ul a {
+    font-size: 0.88rem;
+    color: var(--muted);
+    transition: color 0.2s;
+}
+
+nav ul a:hover {
+    color: var(--accent);
+}
+
+/* ── 히어로 ── */
+.hero {
+    max-width: var(--max);
+    margin: 0 auto;
+    padding: 90px 2rem 70px;
+    display: flex;
+    align-items: center;
+    gap: 3rem;
+}
+
+.hero-text {
+    flex: 1;
+}
+
+.badge {
+    display: inline-block;
+    background: var(--accent-light);
+    color: var(--accent);
+    font-size: 0.78rem;
+    font-weight: 600;
+    padding: 4px 12px;
+    border-radius: 999px;
+    margin-bottom: 1.2rem;
+}
+
+.hero h1 {
+    font-size: clamp(2rem, 4.6vw, 3.1rem);
+    font-weight: 800;
+    letter-spacing: -1.5px;
+    line-height: 1.22;
+    margin-bottom: 1.2rem;
+}
+
+.hero h1 > span {
+    color: var(--accent);
+}
+
+.hero-text > p {
+    font-size: 1.02rem;
+    color: var(--muted);
+    max-width: 520px;
+    margin-bottom: 1.8rem;
+}
+
+.cta {
+    display: flex;
+    gap: 0.7rem;
+    flex-wrap: wrap;
+}
+
+.btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 10px 22px;
+    border-radius: 8px;
+    font-size: 0.9rem;
+    font-weight: 600;
+    transition: all 0.2s;
+    cursor: pointer;
+}
+
+.btn-primary {
+    background: var(--accent);
+    color: #fff;
+}
+
+.btn-primary:hover {
+    background: var(--accent-dark);
+}
+
+.btn-outline {
+    border: 1.5px solid var(--border);
+    background: var(--surface);
+    color: var(--text);
+}
+
+.btn-outline:hover {
+    border-color: var(--accent);
+    color: var(--accent);
+}
+
+/* ── 히어로 프로필 카드 ── */
+.hero-card {
+    flex-shrink: 0;
+    width: 236px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 1rem 1rem 1.2rem;
+    text-align: center;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+}
+
+.hero-photo {
+    width: 100%;
+    aspect-ratio: 3 / 4;
+    max-width: 100%;
+    border-radius: 12px;
+    overflow: hidden;
+    background: var(--tag-bg);
+    margin-bottom: 0.9rem;
+}
+
+.hero-photo img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+}
+
+.hero-name {
+    font-size: 1.05rem;
+    font-weight: 800;
+    letter-spacing: -0.3px;
+}
+
+.hero-name span {
+    font-size: 0.8rem;
+    font-weight: 500;
+    color: var(--muted);
+    margin-left: 4px;
+}
+
+.hero-sub {
+    font-size: 0.78rem;
+    color: var(--muted);
+    margin-bottom: 0.7rem;
+}
+
+.hero-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.35rem;
+    justify-content: center;
+}
+
+.hero-tag {
+    background: var(--accent-light);
+    color: var(--accent);
+    font-size: 0.72rem;
+    font-weight: 600;
+    padding: 3px 9px;
+    border-radius: 4px;
+}
+
+/* ── 섹션 공통 ── */
+section {
+    max-width: var(--max);
+    margin: 0 auto;
+    padding: 56px 2rem;
+    border-top: 1px solid var(--border);
+}
+
+.section-label {
+    font-size: 0.75rem;
+    font-weight: 700;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 0.5rem;
+}
+
+.section-title {
+    font-size: 1.55rem;
+    font-weight: 800;
+    letter-spacing: -0.5px;
+    margin-bottom: 1.8rem;
+}
+
+.sub-head {
+    font-size: 0.8rem;
+    font-weight: 700;
+    letter-spacing: 1.2px;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin: 1.8rem 0 0.8rem;
+}
+
+.sub-head:first-of-type {
+    margin-top: 0;
+}
+
+/* ── 희망 직무 카드 ── */
+.profile-cards {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1.1rem;
+}
+
+.profile-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    padding: 1.5rem 1.3rem;
+    transition: box-shadow 0.2s, border-color 0.2s;
+}
+
+.profile-card:hover {
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.07);
+    border-color: var(--accent);
+}
+
+.pc-icon {
+    font-size: 1.7rem;
+    margin-bottom: 0.7rem;
+}
+
+.profile-card h3 {
+    font-size: 0.92rem;
+    font-weight: 800;
+    letter-spacing: -0.3px;
+    margin-bottom: 0.4rem;
+}
+
+.profile-card p {
+    font-size: 0.83rem;
+    color: var(--muted);
+    line-height: 1.6;
+}
+
+.pc-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.35rem;
+    margin-top: 0.8rem;
+}
+
+.pc-tag {
+    background: var(--tag-bg);
+    color: var(--muted);
+    font-size: 0.73rem;
+    font-weight: 600;
+    padding: 2px 8px;
+    border-radius: 4px;
+}
+
+/* ── 소개 ── */
+.about-lead {
+    margin-bottom: 1.6rem;
+}
+
+.about-lead p {
+    color: #47535f;
+    margin-bottom: 0.8rem;
+}
+
+.about-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1.2rem;
+}
+
+.about-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 1.4rem;
+}
+
+.about-card h3 {
+    font-size: 0.78rem;
+    font-weight: 700;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 0.5rem;
+}
+
+.about-card p {
+    font-size: 0.92rem;
+    color: #47535f;
+}
+
+.about-chips {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.4rem;
+    margin-top: 0.8rem;
+}
+
+.chip {
+    background: var(--tag-bg);
+    color: #4b5563;
+    font-size: 0.78rem;
+    font-weight: 600;
+    padding: 4px 11px;
+    border-radius: 999px;
+}
+
+.chip-accent {
+    background: var(--accent-light);
+    color: var(--accent);
+}
+
+/* ── 타임라인 ── */
+.timeline {
+    display: flex;
+    flex-direction: column;
+}
+
+.tl-item {
+    display: grid;
+    grid-template-columns: 130px 1fr;
+    gap: 1rem;
+    padding: 1.15rem 0;
+    border-bottom: 1px solid var(--border);
+}
+
+.tl-item:last-child {
+    border-bottom: none;
+}
+
+.tl-year {
+    font-size: 0.82rem;
+    color: var(--muted);
+    font-weight: 600;
+    padding-top: 2px;
+    white-space: nowrap;
+}
+
+.tl-content h4 {
+    font-size: 0.97rem;
+    font-weight: 700;
+}
+
+.tl-content p {
+    font-size: 0.87rem;
+    color: var(--muted);
+    margin-top: 2px;
+}
+
+.tl-tag {
+    display: inline-block;
+    margin: 6px 4px 0 0;
+    background: var(--tag-bg);
+    color: var(--muted);
+    font-size: 0.74rem;
+    font-weight: 600;
+    padding: 2px 9px;
+    border-radius: 4px;
+}
+
+.tl-tag.blue {
+    background: var(--accent-light);
+    color: var(--accent);
+}
+
+/* ── 보조 노트 ── */
+.side-note {
+    margin-top: 1.6rem;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-left: 4px solid var(--accent);
+    border-radius: 8px;
+    padding: 1rem 1.2rem;
+}
+
+.side-note h4 {
+    font-size: 0.8rem;
+    font-weight: 700;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 0.3rem;
+}
+
+.side-note p {
+    font-size: 0.87rem;
+    color: #47535f;
+}
+
+.muted-inline {
+    color: var(--muted);
+    font-size: 0.85em;
+}
+
+/* ── 프로젝트 ── */
+.project-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 1.2rem;
+}
+
+.project-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    overflow: hidden;
+    transition: box-shadow 0.2s, border-color 0.2s, transform 0.2s;
+}
+
+.project-card:hover {
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
+    border-color: var(--accent);
+    transform: translateY(-2px);
+}
+
+.project-body {
+    padding: 1.4rem;
+}
+
+.project-meta {
+    font-size: 0.74rem;
+    font-weight: 600;
+    letter-spacing: 0.5px;
+    color: var(--accent);
+    margin-bottom: 0.4rem;
+}
+
+.project-card-title {
+    font-size: 1.02rem;
+    font-weight: 800;
+    letter-spacing: -0.3px;
+    margin-bottom: 0.5rem;
+}
+
+.project-desc {
+    font-size: 0.86rem;
+    color: var(--muted);
+    line-height: 1.65;
+}
+
+.project-stats {
+    display: flex;
+    gap: 1.4rem;
+    margin-top: 1rem;
+    padding-top: 0.9rem;
+    border-top: 1px solid var(--border);
+}
+
+.stat {
+    display: flex;
+    flex-direction: column;
+    font-size: 0.72rem;
+    color: var(--muted);
+    font-weight: 600;
+}
+
+.stat strong {
+    font-size: 1rem;
+    color: var(--text);
+    font-weight: 800;
+}
+
+/* ── 스킬 ── */
+.skill-groups {
+    display: flex;
+    flex-direction: column;
+    gap: 1.4rem;
+}
+
+.skill-group h3 {
+    font-size: 0.8rem;
+    font-weight: 700;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 0.6rem;
+}
+
+.skill-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+}
+
+.skill-tag {
+    background: var(--surface);
+    border: 1.5px solid var(--border);
+    border-radius: 8px;
+    padding: 6px 14px;
+    font-size: 0.87rem;
+    font-weight: 500;
+    transition: border-color 0.2s, color 0.2s;
+}
+
+.skill-tag:hover {
+    border-color: var(--accent);
+    color: var(--accent);
+}
+
+/* ── 자격증 ── */
+.cert-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(190px, 1fr));
+    gap: 0.9rem;
+}
+
+.cert-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 1.1rem;
+    transition: box-shadow 0.2s;
+}
+
+.cert-card:hover {
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.07);
+}
+
+.cert-icon {
+    font-size: 1.5rem;
+    margin-bottom: 0.4rem;
+}
+
+.cert-card h4 {
+    font-size: 0.9rem;
+    font-weight: 700;
+    line-height: 1.4;
+}
+
+.cert-card p {
+    font-size: 0.79rem;
+    color: var(--muted);
+    margin-top: 2px;
+}
+
+/* ── 수상 · 연구실적 ── */
+.award-list {
+    display: flex;
+    flex-direction: column;
+    gap: 0.8rem;
+}
+
+.award-item {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-left: 4px solid var(--accent);
+    border-radius: 8px;
+    padding: 0.95rem 1.2rem;
+}
+
+.award-item h4 {
+    font-size: 0.93rem;
+    font-weight: 700;
+}
+
+.award-item p {
+    font-size: 0.82rem;
+    color: var(--muted);
+    margin-top: 3px;
+}
+
+/* ── 연락처 ── */
+.contact-box {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 2.4rem 2rem;
+    text-align: center;
+}
+
+.contact-box > p {
+    color: var(--muted);
+    margin-bottom: 1.4rem;
+}
+
+.contact-links {
+    display: flex;
+    justify-content: center;
+    gap: 0.8rem;
+    flex-wrap: wrap;
+}
+
+/* ── 푸터 ── */
+footer {
+    max-width: var(--max);
+    margin: 0 auto;
+    padding: 2rem;
+    border-top: 1px solid var(--border);
+    text-align: center;
+    color: var(--muted);
+    font-size: 0.82rem;
+}
+
+/* ── 반응형 ── */
+@media (max-width: 860px) {
+    nav {
+        padding: 0 1rem;
+    }
+
+    nav ul {
+        gap: 0.9rem;
+        overflow-x: auto;
+    }
+
+    nav ul a {
+        font-size: 0.8rem;
+        white-space: nowrap;
+    }
+
+    .profile-cards {
+        grid-template-columns: 1fr;
+    }
+}
+
+@media (max-width: 700px) {
+    .hero {
+        flex-direction: column-reverse;
+        align-items: flex-start;
+        padding: 48px 1.2rem 40px;
+        gap: 1.8rem;
+    }
+
+    .hero-card {
+        width: 100%;
+        max-width: 260px;
+        margin: 0 auto;
+    }
+
+    section {
+        padding: 40px 1.2rem;
+    }
+
+    .about-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .tl-item {
+        grid-template-columns: 1fr;
+        gap: 0.2rem;
+    }
+
+    .project-stats {
+        gap: 1rem;
+    }
+}
+
+/* ── 인쇄 ── */
+@media print {
+    :root {
+        --bg: #fff;
+    }
+
+    nav,
+    .cta,
+    .contact-links {
+        display: none;
+    }
+
+    body {
+        line-height: 1.5;
+    }
+
+    .hero {
+        padding: 0 0 20px;
+    }
+
+    section {
+        padding: 20px 0;
+        break-inside: avoid;
+    }
+
+    .profile-card,
+    .about-card,
+    .cert-card,
+    .project-card,
+    .award-item,
+    .side-note {
+        box-shadow: none;
+        break-inside: avoid;
+    }
+}
+
+/* ── 이력서 전송 폼 (2일차 추가) ── */
+.resume-form {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 1.8rem;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.form-row {
+    display: flex;
+    flex-direction: column;
+    gap: 0.35rem;
+}
+
+.form-row label {
+    font-size: 0.8rem;
+    font-weight: 700;
+    color: var(--muted);
+    letter-spacing: 0.3px;
+}
+
+.resume-form input[type="text"],
+.resume-form input[type="email"],
+.resume-form input[type="date"],
+.resume-form select,
+.resume-form textarea {
+    font-family: inherit;
+    font-size: 0.92rem;
+    color: var(--text);
+    background: var(--bg);
+    border: 1.5px solid var(--border);
+    border-radius: 8px;
+    padding: 10px 12px;
+    transition: border-color 0.2s;
+}
+
+.resume-form input:focus,
+.resume-form select:focus,
+.resume-form textarea:focus {
+    outline: none;
+    border-color: var(--accent);
+}
+
+.resume-form textarea {
+    resize: vertical;
+    line-height: 1.6;
+}
+
+.resume-form input[type="file"] {
+    font-size: 0.86rem;
+    color: var(--muted);
+}
+
+.form-fieldset {
+    border: 1.5px solid var(--border);
+    border-radius: 8px;
+    padding: 0.9rem 1rem;
+}
+
+.form-fieldset legend {
+    font-size: 0.8rem;
+    font-weight: 700;
+    color: var(--muted);
+    padding: 0 6px;
+}
+
+.radio,
+.checkbox {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 0.9rem;
+    margin-right: 1.2rem;
+    cursor: pointer;
+}
+
+.checkbox {
+    color: var(--muted);
+    font-size: 0.86rem;
+}
+
+.form-actions {
+    display: flex;
+    gap: 0.7rem;
+    flex-wrap: wrap;
+    margin-top: 0.4rem;
+}
+
+.form-actions .btn {
+    border: none;
+    font-family: inherit;
+}
+
+.form-actions .btn-outline {
+    border: 1.5px solid var(--border);
+}
+
+    </style>
 </head>
 <body>
-    <h1>Self Introduction.</h1>
-    <hr>
-    <img src="profile.jpg" alt="한승수 증명사진" width="150">
-    <p>
-        정책연구와 공공과제 수행으로 커리어를 쌓아온 한승수입니다.
-        국토해양부 물류표준화, 경기도민 삶의 질 조사 등 대형 정부과제를 실무로 수행했고,
-        지금은 사회복지와 실버산업 현장 경험을 AI 헬스케어 기술과 연결하는 일에 집중하고 있습니다.
-    </p>
-    <ul style="list-style: square;">
-        <li>이름: 한승수 (Hans)</li>
-        <li>성별: 남자</li>
-        <li>신체: 176cm / 72kg / A형</li>
-        <li>MBTI: INTP</li>
-        <li>연락처: 010-5890-6592</li>
-        <li>이메일: hanbiho1023@gmail.com</li>
-        <li>관심분야: 사회복지, AI, 실버산업, 헬스케어</li>
-    </ul>
 
-    <h1>Hobby &amp; Preference</h1>
-    <hr>
-
-    <h4>취미</h4>
-    <p>독서와 OTT 시청으로 입력을 채웁니다.</p>
-
-    <h4>공연 관람</h4>
-    <p>연극 &middot; 뮤지컬 &middot; 콘서트를 <strong>500회 이상</strong> 관람했습니다.</p>
-
-    <h4>운동</h4>
-    <p>태권도 2단, 스킨스쿠버</p>
-
-    <h4>일하는 방식</h4>
-    <p>
-        결론과 구조를 먼저 세우고 근거를 붙이는 분석형입니다.
-        자료와 수치로 설득하는 방식을 선호합니다.
-    </p>
-
-    <h4>보완하는 점</h4>
-    <p>
-        결론을 먼저 말하는 편이어서, 맥락을 함께 공유하는 커뮤니케이션을 연습하고 있습니다.
-    </p>
-
-    <h1>Education</h1>
-    <hr>
-    <table style="table-layout: auto" border="1">
-        <thead>
-            <tr>
-                <th>기간</th>
-                <th>학교</th>
-                <th>전공</th>
-                <th>비고</th>
-            </tr>
-        </thead>
-        <tbody>
-            <tr>
-                <td>2001 ~ 2008</td>
-                <td>광운대학교</td>
-                <td>법학과 / 경영학 복수전공</td>
-                <td>학사 졸업</td>
-            </tr>
-            <tr>
-                <td>2013 ~ 2015</td>
-                <td>가톨릭대학교 대학원</td>
-                <td>행정학과</td>
-                <td>석사 졸업</td>
-            </tr>
-            <tr>
-                <td>2015 ~ 2017</td>
-                <td>가톨릭대학교 대학원</td>
-                <td>행정학과</td>
-                <td>박사 수료</td>
-            </tr>
-        </tbody>
-    </table>
-
-    <h1>Career &amp; Work Experience</h1>
-    <hr>
-    <table style="table-layout: auto" border="1">
-        <thead>
-            <tr>
-                <th>기간</th>
-                <th>기관 / 회사명</th>
-                <th>직무</th>
-            </tr>
-        </thead>
-        <tbody>
-            <tr>
-                <td>2008 ~ 2009</td>
-                <td>서울대학교 공학연구소</td>
-                <td>연구원</td>
-            </tr>
-            <tr>
-                <td>2009 ~ 2011</td>
-                <td>서울대학교 건설환경종합연구소</td>
-                <td>연구원</td>
-            </tr>
-            <tr>
-                <td>2014</td>
-                <td>(주)전략기술경영연구원</td>
-                <td>연구원</td>
-            </tr>
-            <tr>
-                <td>2015</td>
-                <td>(주)한국경제경영연구원</td>
-                <td>연구원</td>
-            </tr>
-            <tr>
-                <td>2016 ~ 2017</td>
-                <td>경기연구원 연구기획본부(정책분석부)</td>
-                <td>연구원</td>
-            </tr>
-            <tr>
-                <td>2018</td>
-                <td>한국문화관광연구원</td>
-                <td>연구원</td>
-            </tr>
-            <tr>
-                <td>2019</td>
-                <td>서울시청</td>
-                <td>뉴딜일자리</td>
-            </tr>
-            <tr>
-                <td>2020</td>
-                <td>서울에너지공사</td>
-                <td>뉴딜일자리</td>
-            </tr>
-        </tbody>
-    </table>
-
-    <h1>Major Projects</h1>
-    <hr>
-    <p>정부 &middot; 공공기관이 발주한 대형 과제를 실무로 수행했습니다.</p>
-    <table style="table-layout: auto" border="1">
-        <thead>
-            <tr>
-                <th>과제명</th>
-                <th>발주 / 수행</th>
-                <th>기간</th>
-                <th>규모</th>
-            </tr>
-        </thead>
-        <tbody>
-            <tr>
-                <td>물류표준화</td>
-                <td>국토해양부 / 서울대 공학연구소</td>
-                <td>5년</td>
-                <td>37억원</td>
-            </tr>
-            <tr>
-                <td>경기도민 삶의 질 조사 (2만명 규모)</td>
-                <td>경기도청 / 경기연구원</td>
-                <td>1년</td>
-                <td>10억원</td>
-            </tr>
-            <tr>
-                <td>제주도 축제 활성화 방안</td>
-                <td>문화관광부 / 한국문화관광연구원</td>
-                <td>6개월</td>
-                <td>5천만원</td>
-            </tr>
-        </tbody>
-    </table>
-
-    <h4>프리랜서 참여 프로젝트</h4>
+<nav>
+    <a href="#top" class="logo">한승수</a>
     <ul>
-        <li>2015 한국원자력통제기술원 &ndash; 중장기 발전전략 보완 및 경영선진화 계획수립 용역</li>
-        <li>2015 BMW 물류창고 개선 프로젝트</li>
-        <li>2015 서울대학교 산학협력단 경영평가 프로젝트</li>
+        <li><a href="#about">소개</a></li>
+        <li><a href="#education">학력</a></li>
+        <li><a href="#experience">경력</a></li>
+        <li><a href="#projects">프로젝트</a></li>
+        <li><a href="#skills">스킬</a></li>
+        <li><a href="#certs">자격증</a></li>
+        <li><a href="#send">전송</a></li>
+        <li><a href="#contact">연락처</a></li>
     </ul>
+</nav>
 
-    <h1>Research &amp; Publication</h1>
-    <hr>
-    <h4>석사학위 논문</h4>
-    <ul>
-        <li>
-            한국국제협력단(KOICA)의 개발협력사업 성과관리 개선방안 연구 (2015)
-            <br>&ndash; AHP 분석을 이용한 성과관리를 중심으로 &ndash;
-        </li>
-    </ul>
-
-    <h4>학술지 게재</h4>
-    <ol>
-        <li>AHP를 이용한 한국국제협력단(KOICA)사업 성과관리 개선방안 &ndash; 경운대학교 새마을연구소, 2015, 제11권 1호</li>
-        <li>다문화가족의 미취학 자녀 교육지원방안 연구(경기도 다문화유치원을 중심으로) &ndash; 가톨릭대학교 정부혁신생산성연구소, 2017, 제9권 2호</li>
-    </ol>
-
-    <h4>정책연구보고서</h4>
-    <ol>
-        <li>2015 경기도민 삶의 질 동태분석을 위한 기초 연구 (경기연구원)</li>
-        <li>2015 경기도 다문화가정 미취학 아동 지원방안 연구 (경기연구원)</li>
-    </ol>
-
-    <h1>Awards</h1>
-    <hr>
-    <ul>
-        <li>2007 전국 보훈학술논문 공모전 입상 (국가보훈처)</li>
-        <li>2008 전국 대학생 정책공모전 입상 (여의도연구소)</li>
-    </ul>
-
-    <h1>Certifications</h1>
-    <hr>
-    <h4>경영 &middot; 일반</h4>
-    <table style="table-layout: auto" border="1">
-        <tbody>
-            <tr><td>2005</td><td>유통관리사 2급</td></tr>
-            <tr><td>2007</td><td>워드프로세서 1급</td></tr>
-            <tr><td>2007</td><td>공인구매자재관리사</td></tr>
-            <tr><td>2012</td><td>운전면허 1종 대형 / 1종 보통</td></tr>
-            <tr><td>2014</td><td>R&amp;D 전략기획 전문가 3급</td></tr>
-            <tr><td>2014</td><td>R&amp;D 프로젝트 관리 전문가 3급</td></tr>
-            <tr><td>2018</td><td>건설업 기초안전보건교육 이수증</td></tr>
-        </tbody>
-    </table>
-
-    <h4>헬스케어 &middot; 복지</h4>
-    <table style="table-layout: auto" border="1">
-        <tbody>
-            <tr><td>2024</td><td>요양보호사</td></tr>
-            <tr><td>2024</td><td>병원동행매니저</td></tr>
-            <tr><td>2026</td><td>사회복지사 2급</td></tr>
-            <tr><td>2026</td><td>건강가정사</td></tr>
-            <tr><td>2026</td><td>심폐소생술 교육 수료증</td></tr>
-        </tbody>
-    </table>
-
-    <h4>기타</h4>
-    <ul>
-        <li>태권도 2단</li>
-        <li>스킨스쿠버 자격증</li>
-    </ul>
-
-    <h1>Other Experience</h1>
-    <hr>
-    <ul>
-        <li>대학 재학 중 다양한 아르바이트 수행 (세일즈, 행사요원, 보안요원 등)</li>
-        <li>YBM 어학원 영어 조교</li>
-        <li>대학원 조교</li>
-    </ul>
-
-    <h1>Send Cover Letter</h1>
-    <hr>
-    <form>
+<!-- ── HERO ── -->
+<header class="hero" id="top">
+    <div class="hero-text">
+        <span class="badge">Public Policy × Healthcare × AI</span>
+        <h1>데이터로 근거를 만들고,<br><span>돌봄의 현장</span>을<br>서비스로 잇습니다</h1>
         <p>
+            정부·공공 연구과제를 10년간 설계하고 운영해 온 연구자입니다.
+            지금은 요양·복지 현장 경험을 AI 헬스케어 서비스로 구현하고 있습니다.
+        </p>
+        <div class="cta">
+            <a class="btn btn-primary" href="#contact">연락하기</a>
+            <a class="btn btn-outline" href="#experience">경력 보기</a>
+            <a class="btn btn-outline" href="#projects">프로젝트 보기</a>
+        </div>
+    </div>
+
+    <aside class="hero-card">
+        <div class="hero-photo">
+            <img src="profile.jpg" alt="한승수 증명사진">
+        </div>
+        <p class="hero-name">한승수 <span>Hans</span></p>
+        <p class="hero-sub">176cm · 72kg · A형 · INTP</p>
+        <div class="hero-tags">
+            <span class="hero-tag">정책연구</span>
+            <span class="hero-tag">데이터 분석</span>
+            <span class="hero-tag">헬스케어</span>
+        </div>
+    </aside>
+</header>
+
+<!-- ── 희망 직무 ── -->
+<section id="role">
+    <p class="section-label">Desired Role</p>
+    <h2 class="section-title">희망 직무</h2>
+    <div class="profile-cards">
+        <article class="profile-card">
+            <div class="pc-icon">🩺</div>
+            <h3>헬스케어 서비스 기획</h3>
+            <p>돌봄 현장에서 확인한 문제를 서비스 요구사항으로 정리합니다.</p>
+            <div class="pc-tags">
+                <span class="pc-tag">요구사항 정의</span>
+                <span class="pc-tag">현장 리서치</span>
+            </div>
+        </article>
+        <article class="profile-card">
+            <div class="pc-icon">📊</div>
+            <h3>정책 · 데이터 분석</h3>
+            <p>대규모 조사 설계와 지표 분석으로 의사결정 근거를 만듭니다.</p>
+            <div class="pc-tags">
+                <span class="pc-tag">AHP</span>
+                <span class="pc-tag">성과관리</span>
+            </div>
+        </article>
+        <article class="profile-card">
+            <div class="pc-icon">⚙️</div>
+            <h3>AI 서비스 개발</h3>
+            <p>FastAPI·Docker 기반으로 모델을 실제 서비스로 배포합니다.</p>
+            <div class="pc-tags">
+                <span class="pc-tag">Python</span>
+                <span class="pc-tag">FastAPI</span>
+            </div>
+        </article>
+    </div>
+</section>
+
+<!-- ── 소개 ── -->
+<section id="about">
+    <p class="section-label">About</p>
+    <h2 class="section-title">소개</h2>
+
+    <div class="about-lead">
+        <p>
+            국토해양부 물류표준화(5년 · 37억), 경기도민 삶의 질 조사(2만명 · 10억) 등
+            대형 국가과제를 실무로 설계하고 운영했습니다.
+            AHP, 성과관리 체계, 대규모 설문 분석을 다루며 숫자로 결론을 만드는 일에 익숙합니다.
+        </p>
+        <p>
+            2020년 이후에는 요양보호사·병원동행매니저·사회복지사 자격을 취득하며 돌봄 현장을 직접 익혔고,
+            그 경험을 AI 헬스케어 서비스로 구현하기 위해 개발 역량을 쌓고 있습니다.
+        </p>
+    </div>
+
+    <div class="about-grid">
+        <div class="about-card">
+            <h3>Interests</h3>
+            <p>독서와 OTT로 입력을 채우고, 공연으로 감각을 유지합니다.</p>
+            <div class="about-chips">
+                <span class="chip">독서</span>
+                <span class="chip">OTT</span>
+                <span class="chip chip-accent">공연 관람 500회+</span>
+                <span class="chip">연극</span>
+                <span class="chip">뮤지컬</span>
+                <span class="chip">콘서트</span>
+            </div>
+        </div>
+        <div class="about-card">
+            <h3>Sports</h3>
+            <p>몸으로 익힌 것은 오래 남는다고 생각합니다.</p>
+            <div class="about-chips">
+                <span class="chip">태권도 2단</span>
+                <span class="chip">스킨스쿠버</span>
+            </div>
+        </div>
+        <div class="about-card">
+            <h3>Strengths</h3>
+            <p>
+                결론과 구조를 먼저 세우고 근거를 붙이는 방식으로 일합니다.
+                분석형(INTP) 성향이 강해 자료·수치로 설득하는 데 강점이 있습니다.
+            </p>
+        </div>
+        <div class="about-card">
+            <h3>Working On</h3>
+            <p>
+                말보다 자료가 앞서는 편이어서, 결론을 전달하는 속도를 조절하고
+                맥락을 먼저 공유하는 커뮤니케이션을 의식적으로 연습하고 있습니다.
+            </p>
+        </div>
+    </div>
+</section>
+
+<!-- ── 학력 ── -->
+<section id="education">
+    <p class="section-label">Education</p>
+    <h2 class="section-title">학력</h2>
+    <div class="timeline">
+        <div class="tl-item">
+            <div class="tl-year">2015 – 2017</div>
+            <div class="tl-content">
+                <h4>가톨릭대학교 대학원 행정학과</h4>
+                <p>박사 수료</p>
+                <span class="tl-tag">행정학</span>
+            </div>
+        </div>
+        <div class="tl-item">
+            <div class="tl-year">2013 – 2015</div>
+            <div class="tl-content">
+                <h4>가톨릭대학교 대학원 행정학과</h4>
+                <p>석사 졸업 · 학위논문 「KOICA 개발협력사업 성과관리 개선방안 연구」</p>
+                <span class="tl-tag blue">AHP 분석</span>
+            </div>
+        </div>
+        <div class="tl-item">
+            <div class="tl-year">2001 – 2008</div>
+            <div class="tl-content">
+                <h4>광운대학교</h4>
+                <p>법학과 · 경영학 복수전공 · 학사 졸업</p>
+                <span class="tl-tag">법학</span>
+                <span class="tl-tag">경영학</span>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- ── 경력 ── -->
+<section id="experience">
+    <p class="section-label">Experience</p>
+    <h2 class="section-title">경력</h2>
+    <div class="timeline">
+        <div class="tl-item">
+            <div class="tl-year">2020</div>
+            <div class="tl-content">
+                <h4>서울에너지공사</h4>
+                <p>사업 데이터 정리와 통계 산출, 내부 보고자료 작성</p>
+                <span class="tl-tag">뉴딜일자리</span>
+            </div>
+        </div>
+        <div class="tl-item">
+            <div class="tl-year">2019</div>
+            <div class="tl-content">
+                <h4>서울시청</h4>
+                <p>행정 실무 및 사업 지원</p>
+                <span class="tl-tag">뉴딜일자리</span>
+            </div>
+        </div>
+        <div class="tl-item">
+            <div class="tl-year">2018</div>
+            <div class="tl-content">
+                <h4>한국문화관광연구원</h4>
+                <p>지역 축제 운영 실태 진단과 방문객 만족도 분석</p>
+                <span class="tl-tag">연구원</span>
+            </div>
+        </div>
+        <div class="tl-item">
+            <div class="tl-year">2016 – 2017</div>
+            <div class="tl-content">
+                <h4>경기연구원 연구기획본부 정책분석부</h4>
+                <p>도민 2만명 규모 조사 설계·표본 관리·품질 검증, 삶의 질 지표 동태분석</p>
+                <span class="tl-tag blue">대표 경력</span>
+                <span class="tl-tag">연구원</span>
+            </div>
+        </div>
+        <div class="tl-item">
+            <div class="tl-year">2015</div>
+            <div class="tl-content">
+                <h4>(주)한국경제경영연구원</h4>
+                <p>공공기관 경영·전략 수탁 연구</p>
+                <span class="tl-tag">연구원</span>
+            </div>
+        </div>
+        <div class="tl-item">
+            <div class="tl-year">2014</div>
+            <div class="tl-content">
+                <h4>(주)전략기술경영연구원</h4>
+                <p>기술경영·R&amp;D 기획 연구</p>
+                <span class="tl-tag">연구원</span>
+            </div>
+        </div>
+        <div class="tl-item">
+            <div class="tl-year">2009 – 2011</div>
+            <div class="tl-content">
+                <h4>서울대학교 건설환경종합연구소</h4>
+                <p>국가 물류표준 체계 수립 실태조사 및 해외사례 분석</p>
+                <span class="tl-tag">연구원</span>
+            </div>
+        </div>
+        <div class="tl-item">
+            <div class="tl-year">2008 – 2009</div>
+            <div class="tl-content">
+                <h4>서울대학교 공학연구소</h4>
+                <p>다년도 대형과제의 연차별 실적 관리 및 발주처 보고 대응</p>
+                <span class="tl-tag">연구원</span>
+            </div>
+        </div>
+    </div>
+
+    <div class="side-note">
+        <h4>그 외 경험</h4>
+        <p>YBM 어학원 영어 조교 · 대학원 조교 · 대학 재학 중 세일즈, 행사요원, 보안요원 등 다양한 현장 근무</p>
+    </div>
+</section>
+
+<!-- ── 프로젝트 ── -->
+<section id="projects">
+    <p class="section-label">Projects</p>
+    <h2 class="section-title">주요 프로젝트</h2>
+    <div class="project-grid">
+        <article class="project-card">
+            <div class="project-body">
+                <p class="project-meta">국토해양부 · 서울대 공학연구소</p>
+                <h3 class="project-card-title">국가 물류표준화 체계 수립</h3>
+                <p class="project-desc">
+                    국가 물류표준 체계 수립을 위한 실태조사와 해외사례 분석을 담당했습니다.
+                    다년도 대형과제의 연차 실적 관리와 발주처 보고를 함께 맡았습니다.
+                </p>
+                <div class="project-stats">
+                    <span class="stat"><strong>5년</strong>기간</span>
+                    <span class="stat"><strong>37억</strong>사업비</span>
+                </div>
+            </div>
+        </article>
+
+        <article class="project-card">
+            <div class="project-body">
+                <p class="project-meta">경기도청 · 경기연구원</p>
+                <h3 class="project-card-title">경기도민 삶의 질 조사</h3>
+                <p class="project-desc">
+                    도민 2만명 규모 설문의 설계·표본 관리·품질 검증을 수행하고,
+                    삶의 질 지표 동태분석 프레임을 설계했습니다.
+                </p>
+                <div class="project-stats">
+                    <span class="stat"><strong>2만명</strong>표본</span>
+                    <span class="stat"><strong>10억</strong>사업비</span>
+                </div>
+            </div>
+        </article>
+
+        <article class="project-card">
+            <div class="project-body">
+                <p class="project-meta">문화관광부 · 한국문화관광연구원</p>
+                <h3 class="project-card-title">제주도 축제 활성화 방안</h3>
+                <p class="project-desc">
+                    지역 축제 운영 실태를 진단하고 방문객 만족도를 분석해
+                    실행과제를 도출했습니다.
+                </p>
+                <div class="project-stats">
+                    <span class="stat"><strong>6개월</strong>기간</span>
+                    <span class="stat"><strong>5천만</strong>사업비</span>
+                </div>
+            </div>
+        </article>
+
+        <article class="project-card">
+            <div class="project-body">
+                <p class="project-meta">경기도청 · 경기연구원</p>
+                <h3 class="project-card-title">다문화가정 미취학 아동 지원방안</h3>
+                <p class="project-desc">
+                    경기도 다문화유치원을 중심으로 교육지원 실태를 분석하고
+                    정책 제언을 도출해 학술지에 게재했습니다.
+                </p>
+                <div class="project-stats">
+                    <span class="stat"><strong>2015</strong>수행</span>
+                    <span class="stat"><strong>학술지</strong>게재</span>
+                </div>
+            </div>
+        </article>
+    </div>
+
+    <div class="side-note">
+        <h4>프리랜서 참여</h4>
+        <p>
+            한국원자력통제기술원 중장기 발전전략 및 경영선진화 계획수립 용역 ·
+            서울대학교 산학협력단 경영평가 · BMW 물류창고 개선 프로젝트 <span class="muted-inline">(2015)</span>
+        </p>
+    </div>
+</section>
+
+<!-- ── 스킬 ── -->
+<section id="skills">
+    <p class="section-label">Skills</p>
+    <h2 class="section-title">기술 스택</h2>
+    <div class="skill-groups">
+        <div class="skill-group">
+            <h3>정책 · 연구</h3>
+            <div class="skill-tags">
+                <span class="skill-tag">AHP 분석</span>
+                <span class="skill-tag">성과관리 체계 설계</span>
+                <span class="skill-tag">대규모 설문 조사</span>
+                <span class="skill-tag">정책보고서 작성</span>
+                <span class="skill-tag">경영평가</span>
+            </div>
+        </div>
+        <div class="skill-group">
+            <h3>개발 · AI</h3>
+            <div class="skill-tags">
+                <span class="skill-tag">Python</span>
+                <span class="skill-tag">FastAPI</span>
+                <span class="skill-tag">SQL</span>
+                <span class="skill-tag">HTML / CSS</span>
+                <span class="skill-tag">JavaScript</span>
+                <span class="skill-tag">Docker</span>
+                <span class="skill-tag">Git / GitHub</span>
+                <span class="skill-tag">머신러닝 · 딥러닝</span>
+            </div>
+        </div>
+        <div class="skill-group">
+            <h3>헬스케어 · 복지 현장</h3>
+            <div class="skill-tags">
+                <span class="skill-tag">요양보호</span>
+                <span class="skill-tag">병원동행</span>
+                <span class="skill-tag">사회복지 실무</span>
+                <span class="skill-tag">건강가정 상담</span>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- ── 자격증 ── -->
+<section id="certs">
+    <p class="section-label">Certifications</p>
+    <h2 class="section-title">자격증</h2>
+
+    <h3 class="sub-head">헬스케어 · 복지</h3>
+    <div class="cert-grid">
+        <div class="cert-card">
+            <div class="cert-icon">🫀</div>
+            <h4>심폐소생술 교육 수료</h4>
+            <p>2026</p>
+        </div>
+        <div class="cert-card">
+            <div class="cert-icon">🏠</div>
+            <h4>건강가정사</h4>
+            <p>2026</p>
+        </div>
+        <div class="cert-card">
+            <div class="cert-icon">🤝</div>
+            <h4>사회복지사 2급</h4>
+            <p>2026</p>
+        </div>
+        <div class="cert-card">
+            <div class="cert-icon">🚑</div>
+            <h4>병원동행매니저</h4>
+            <p>2024</p>
+        </div>
+        <div class="cert-card">
+            <div class="cert-icon">🧑‍⚕️</div>
+            <h4>요양보호사</h4>
+            <p>2024</p>
+        </div>
+    </div>
+
+    <h3 class="sub-head">경영 · 일반</h3>
+    <div class="cert-grid">
+        <div class="cert-card">
+            <div class="cert-icon">🦺</div>
+            <h4>건설업 기초안전보건교육</h4>
+            <p>2018</p>
+        </div>
+        <div class="cert-card">
+            <div class="cert-icon">📐</div>
+            <h4>R&amp;D 프로젝트 관리 전문가 3급</h4>
+            <p>2014</p>
+        </div>
+        <div class="cert-card">
+            <div class="cert-icon">🧪</div>
+            <h4>R&amp;D 전략기획 전문가 3급</h4>
+            <p>2014</p>
+        </div>
+        <div class="cert-card">
+            <div class="cert-icon">🚚</div>
+            <h4>운전면허 1종 대형 · 보통</h4>
+            <p>2012</p>
+        </div>
+        <div class="cert-card">
+            <div class="cert-icon">📦</div>
+            <h4>공인구매자재관리사</h4>
+            <p>2007</p>
+        </div>
+        <div class="cert-card">
+            <div class="cert-icon">⌨️</div>
+            <h4>워드프로세서 1급</h4>
+            <p>2007</p>
+        </div>
+        <div class="cert-card">
+            <div class="cert-icon">🏪</div>
+            <h4>유통관리사 2급</h4>
+            <p>2005</p>
+        </div>
+    </div>
+</section>
+
+
+<!-- ── 이력서 전송 ── -->
+<section id="send">
+    <p class="section-label">Send Resume</p>
+    <h2 class="section-title">이력서 전송</h2>
+    <form class="resume-form">
+        <div class="form-row">
             <label for="nameInput">담당자 성명</label>
             <input id="nameInput" type="text" placeholder="홍길동" required>
-        </p>
-        <p>
+        </div>
+        <div class="form-row">
             <label for="emailInput">담당자 이메일</label>
-            <input id="emailInput" type="email" placeholder="email@example.com" required>
-        </p>
-        <p>
+            <input id="emailInput" type="email" placeholder="recruit@example.com" required>
+        </div>
+        <div class="form-row">
             <label for="companyInput">회사명</label>
             <input id="companyInput" type="text" placeholder="(주)실버케어테크" required>
-        </p>
-        <p>
+        </div>
+        <div class="form-row">
             <label for="positionSelect">지원 직무</label>
             <select id="positionSelect">
-                <option value="">-- 선택 --</option>
+                <option value="">선택해 주세요</option>
                 <option value="healthcare-planner">헬스케어 서비스 기획</option>
                 <option value="policy-research">정책 &middot; 데이터 분석</option>
                 <option value="ai-service">AI 서비스 개발</option>
                 <option value="silver-biz">실버산업 사업개발</option>
             </select>
-        </p>
-        <p>
+        </div>
+        <div class="form-row">
             <label for="availableDate">입사 가능일</label>
             <input id="availableDate" type="date">
-        </p>
-        <fieldset>
+        </div>
+        <fieldset class="form-fieldset">
             <legend>희망 근무 형태</legend>
-            <label><input type="radio" name="workType" value="fulltime" checked> 정규직</label>
-            <label><input type="radio" name="workType" value="contract"> 계약직</label>
-            <label><input type="radio" name="workType" value="project"> 프로젝트 참여</label>
+            <label class="radio"><input type="radio" name="workType" value="fulltime" checked> 정규직</label>
+            <label class="radio"><input type="radio" name="workType" value="contract"> 계약직</label>
+            <label class="radio"><input type="radio" name="workType" value="project"> 프로젝트 참여</label>
         </fieldset>
-        <p>
-            <label for="messageInput">전달 메시지</label><br>
-            <textarea id="messageInput" rows="5" cols="60" placeholder="정책연구 10년 경험을 AI 헬스케어 서비스 기획에 활용하고 싶습니다."></textarea>
-        </p>
-        <p>
+        <div class="form-row">
+            <label for="messageInput">전달 메시지</label>
+            <textarea id="messageInput" rows="4" placeholder="정책연구 10년 경험을 AI 헬스케어 서비스 기획에 활용하고 싶습니다."></textarea>
+        </div>
+        <div class="form-row">
             <label for="resumeFile">포트폴리오 첨부</label>
             <input id="resumeFile" type="file" accept=".pdf,.docx">
-        </p>
-        <p>
-            <label><input type="checkbox" id="agreeInput" required> 개인정보 제공에 동의합니다.</label>
-        </p>
-        <p>
-            <button type="submit">이력서 전송하기</button>
-            <button type="reset">다시 작성</button>
-        </p>
+        </div>
+        <label class="checkbox">
+            <input type="checkbox" id="agreeInput" required> 개인정보 제공에 동의합니다.
+        </label>
+        <div class="form-actions">
+            <button class="btn btn-primary" type="submit">이력서 전송하기</button>
+            <button class="btn btn-outline" type="reset">다시 작성</button>
+        </div>
     </form>
+</section>
+
+<!-- ── 연락처 ── -->
+<section id="contact">
+    <p class="section-label">Contact</p>
+    <h2 class="section-title">연락처</h2>
+    <div class="contact-box">
+        <p>정책 데이터와 돌봄 현장을 함께 아는 사람이 필요하시면 언제든 연락 주세요.</p>
+        <div class="contact-links">
+            <!-- 전화번호 자릿수 확인 필요 -->
+            <a class="btn btn-primary" href="tel:01058906592">📞 010-5890-6592</a>
+            <a class="btn btn-outline" href="mailto:hanbiho1023@gmail.com">✉️ hanbiho1023@gmail.com</a>
+        </div>
+    </div>
+</section>
+
+<footer>
+    <p>© 2026 한승수 · Hans</p>
+</footer>
+
 </body>
 </html>

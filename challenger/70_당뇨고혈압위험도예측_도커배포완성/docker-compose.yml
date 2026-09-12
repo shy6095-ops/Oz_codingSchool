@@ -1,0 +1,58 @@
+# ── 챌린저 70: 베이스 구성 ──
+# 어느 환경에서나 공통인 것만 둔다. 호스트 포트는 열지 않는다.
+#
+#   개발  : docker compose -f docker-compose.yml -f docker-compose.dev.yml  up -d
+#   운영  : docker compose -f docker-compose.yml -f docker-compose.prod.yml up -d
+#
+# ※ ports 를 베이스에 두면 안 된다.
+#    Compose 는 ports 리스트를 "병합(append)" 하므로, 오버라이드에서
+#    ports: [] 로 지워도 베이스의 매핑이 그대로 살아남는다.
+#    -> 운영에서 api 가 외부에 직접 노출되어 리버스 프록시가 무의미해진다.
+services:
+  api:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      target: runtime
+    image: health-risk:2.0
+    environment:
+      REDIS_URL: redis://redis:6379/0
+      MODEL_PATH: /app/models/risk_model.json
+    expose:
+      - "8000"
+    healthcheck:
+      test: ["CMD-SHELL", "curl -f http://localhost:8000/readyz || exit 1"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 15s
+    depends_on:
+      redis:
+        condition: service_healthy
+
+  worker:
+    image: health-risk:2.0
+    command: ["python", "-m", "worker.main"]
+    environment:
+      REDIS_URL: redis://redis:6379/0
+      MODEL_PATH: /app/models/risk_model.json
+    # 워커가 api 이미지에 의존하므로 빌드 순서를 맞춘다
+    depends_on:
+      api:
+        condition: service_started
+      redis:
+        condition: service_healthy
+
+  redis:
+    image: redis:7-alpine
+    command: ["redis-server", "--appendonly", "yes"]
+    volumes:
+      - redis_data:/data
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 5s
+      timeout: 3s
+      retries: 5
+
+volumes:
+  redis_data:

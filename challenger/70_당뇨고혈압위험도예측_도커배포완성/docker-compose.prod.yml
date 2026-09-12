@@ -1,0 +1,86 @@
+# ── 프로덕션 오버레이 ──
+#   docker compose -f docker-compose.yml -f docker-compose.prod.yml up -d
+#
+# 개발과의 차이
+#   - api 는 호스트 포트를 열지 않는다 (nginx 를 통해서만 접근)
+#   - nginx 리버스 프록시가 80 포트만 개방
+#   - api/worker 를 복제해 처리량 확보
+#   - APP_ENV=prod -> /docs · /openapi.json 비활성화, CORS 도메인 제한
+#   - 로그 로테이션과 리소스 상한 설정
+services:
+  api:
+    environment:
+      APP_ENV: prod
+      CORS_ORIGINS: ${CORS_ORIGINS}
+      RATE_LIMIT_PER_MIN: ${RATE_LIMIT_PER_MIN:-60}
+      CACHE_TTL: ${CACHE_TTL:-600}
+    deploy:
+      replicas: ${API_REPLICAS:-2}
+      resources:
+        limits:
+          cpus: "1.0"
+          memory: 512M
+    # 로그가 디스크를 채우지 않게 로테이션한다. 운영에서 자주 놓치는 부분.
+    logging:
+      driver: json-file
+      options:
+        max-size: "10m"
+        max-file: "3"
+    restart: always
+
+  worker:
+    deploy:
+      replicas: ${WORKER_REPLICAS:-2}
+      resources:
+        limits:
+          cpus: "0.5"
+          memory: 256M
+    logging:
+      driver: json-file
+      options:
+        max-size: "10m"
+        max-file: "3"
+    restart: always
+
+  nginx:
+    image: nginx:1.27-alpine
+    ports:
+      - "80:80"
+    volumes:
+      # 읽기 전용 마운트. 컨테이너가 설정을 고칠 이유가 없다.
+      - ./nginx/nginx.conf:/etc/nginx/conf.d/default.conf:ro
+    depends_on:
+      api:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD-SHELL", "wget -q -O - http://localhost/nginx-health || exit 1"]
+      interval: 10s
+      timeout: 3s
+      retries: 3
+    logging:
+      driver: json-file
+      options:
+        max-size: "10m"
+        max-file: "3"
+    restart: always
+
+  redis:
+    # 메모리 상한 + LRU 축출. 캐시가 무한히 늘어나 OOM 되는 것을 막는다.
+    command:
+      - redis-server
+      - --appendonly
+      - "yes"
+      - --maxmemory
+      - 256mb
+      - --maxmemory-policy
+      - allkeys-lru
+    deploy:
+      resources:
+        limits:
+          memory: 320M
+    logging:
+      driver: json-file
+      options:
+        max-size: "10m"
+        max-file: "3"
+    restart: always

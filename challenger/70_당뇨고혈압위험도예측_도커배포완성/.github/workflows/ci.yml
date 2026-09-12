@@ -1,0 +1,85 @@
+name: CI
+
+on:
+  push:
+    branches: ["**"]
+  pull_request:
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.13"
+          cache: pip
+
+      - name: 의존성 설치
+        run: pip install -r requirements-dev.txt
+
+      - name: 모델 학습
+        run: MODEL_DIR=models python train/train.py
+
+      - name: 테스트
+        run: PYTHONPATH=. pytest tests -q
+
+  docker:
+    runs-on: ubuntu-latest
+    needs: test
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: docker/setup-buildx-action@v3
+
+      - name: 이미지 빌드
+        uses: docker/build-push-action@v6
+        with:
+          context: .
+          target: runtime
+          tags: health-risk:ci
+          load: true
+          # GitHub Actions 캐시로 레이어를 재사용해 빌드 시간을 줄인다
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
+
+      - name: 컨테이너 기동 및 스모크 테스트
+        run: |
+          docker run -d --name risk -p 8000:8000 \
+            -e APP_ENV=dev -e REDIS_URL=redis://localhost:6379/0 \
+            health-risk:ci
+
+          for i in $(seq 1 30); do
+            if curl -fsS http://localhost:8000/healthcheck; then break; fi
+            sleep 2
+          done
+
+          echo "--- 예측 요청"
+          curl -fsS -X POST http://localhost:8000/api/predict \
+            -H 'Content-Type: application/json' \
+            -d '{"age":52,"height_cm":176,"weight_kg":82,"systolic":138,"diastolic":88,"glucose":112,"hba1c":6.1,"family_history":1,"smoker":0,"exercise_days":1}' \
+            || (docker logs risk && exit 1)
+
+      - name: compose 구성 검증
+        run: |
+          cp .env.example .env
+          docker compose -f docker-compose.yml -f docker-compose.dev.yml  config -q
+          docker compose -f docker-compose.yml -f docker-compose.prod.yml config -q
+
+      - name: 운영 구성에서 api 포트가 닫혀있는지 확인
+        run: |
+          cp .env.example .env
+          docker compose -f docker-compose.yml -f docker-compose.prod.yml config > merged.yml
+          python3 - <<'EOF'
+          import re, sys
+          text = open('merged.yml').read()
+          block = re.search(r'^  api:\n(.*?)(?=^  \w+:)', text, re.S | re.M).group(1)
+          if 'published:' in block:
+              sys.exit('FAIL: 운영 구성에서 api 가 호스트에 노출됨')
+          print('OK: api 는 nginx 를 통해서만 접근 가능')
+          EOF
+
+      - name: 정리
+        if: always()
+        run: docker rm -f risk || true

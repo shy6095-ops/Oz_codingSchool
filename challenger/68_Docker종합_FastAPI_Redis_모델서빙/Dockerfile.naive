@@ -1,0 +1,21 @@
+# ============================================================
+# 비교용: 최적화하지 않은 단일 스테이지 Dockerfile
+# 같은 앱인데 이미지가 더 크고, 캐시도 거의 못 쓴다.
+#   docker build -f Dockerfile.naive -t serving:naive .
+#   docker build -f Dockerfile       -t serving:multi .
+#   docker images | grep serving
+# ============================================================
+FROM python:3.13
+
+# 문제 1: 소스를 먼저 복사 -> 코드 한 줄만 고쳐도 아래 pip install 이 전부 다시 돈다
+COPY . /app
+WORKDIR /app
+
+# 문제 2: 빌드 도구가 최종 이미지에 그대로 남는다
+RUN apt-get update && apt-get install -y build-essential
+
+# 문제 3: --no-cache-dir 없음 -> pip 캐시가 이미지에 남는다
+RUN pip install -r requirements.txt
+
+# 문제 4: root 로 실행
+CMD ["uvicorn", "app.main:app", "--host", "0.0.0.0", "--port", "8000"]
