@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>실시간 암호화폐 가격 추적기</title>
+    <link rel="stylesheet" href="crypto_style.css">
+</head>
+<body>
+    <div class="container">
+        <header class="page-header">
+            <h1>실시간 암호화폐 가격 추적기</h1>
+            <p class="updated">
+                <span id="updatedAt">불러오는 중...</span>
+                <button id="refreshBtn" class="refresh-btn">새로고침</button>
+            </p>
+        </header>
+
+        <div class="tabs">
+            <button id="allTab" class="tab-btn active" data-tab="all">전체보기</button>
+            <button id="favTab" class="tab-btn" data-tab="favorites">
+                관심목록 <span id="favCount" class="badge">0</span>
+            </button>
+        </div>
+
+        <div class="controls">
+            <input type="text" id="searchBox" placeholder="심볼 검색 (예: BTC, ETHUSDT)">
+            <select id="sortSelect">
+                <option value="symbol">심볼순</option>
+                <option value="change-desc">상승률 높은순</option>
+                <option value="change-asc">하락률 높은순</option>
+                <option value="volume">거래대금순</option>
+            </select>
+        </div>
+
+        <p id="status" class="status">데이터를 불러오는 중...</p>
+
+        <div class="table-wrap">
+            <table id="cryptoTable" class="hidden">
+                <thead>
+                    <tr>
+                        <th>관심</th>
+                        <th>심볼</th>
+                        <th>현재가</th>
+                        <th>24h 변동률</th>
+                        <th>고가</th>
+                        <th>저가</th>
+                        <th>거래대금</th>
+                    </tr>
+                </thead>
+                <tbody id="cryptoBody"></tbody>
+            </table>
+        </div>
+    </div>
+
+    <script src="crypto_tracker.js"></script>
+</body>
+</html>
