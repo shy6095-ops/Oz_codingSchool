@@ -112,7 +112,7 @@ docker compose up -d --scale api=3
 ## 파일 구성
 
 ```
-66_Docker기초_빌드와컴포즈/
+66-docker-basics-build-compose/
 ├── main.py             # FastAPI 앱 (/, /healthcheck, POST /bmi)
 ├── requirements.txt
 ├── Dockerfile          # 줄마다 주석으로 역할 정리

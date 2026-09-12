@@ -246,7 +246,7 @@ docker compose -f docker-compose.yml -f docker-compose.prod.yml logs -f api | he
 ## 파일 구성
 
 ```
-70_당뇨고혈압위험도예측_도커배포완성/
+70-health-risk-deploy/
 ├── app/
 │   ├── config.py            # 환경변수 설정 (12-Factor)
 │   ├── predictor.py         # 추론 + 임상 판정 + 권고

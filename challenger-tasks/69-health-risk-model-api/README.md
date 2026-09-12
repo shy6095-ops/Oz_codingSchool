@@ -187,7 +187,7 @@ USER appuser                                        # 비root 실행
 ## 파일 구성
 
 ```
-69_당뇨고혈압위험도예측_모델과API/
+69-health-risk-model-api/
 ├── train/train.py           # 당뇨·고혈압 2종 모델 학습 (표준 라이브러리)
 ├── models/risk_model.json   # 계수 + 표준화 기준 + 성능
 ├── app/

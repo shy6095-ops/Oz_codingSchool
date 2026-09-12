@@ -6,12 +6,12 @@
 
 | 챌린지 | 강의 | 주제 | 폴더 |
 | --- | --- | --- | --- |
-| 52 | HTML/CSS 1일차 | 내 이력서 만들기 (단일 파일) | `52_HTML기초_내이력서만들기` |
-| 53 | HTML/CSS 2일차 | 이력서 전송 폼 추가 | `53_HTML폼_이력서전송폼추가` |
-| 54 | HTML/CSS 3일차 | 외부 CSS 분리 · 반응형 · 인쇄 | `54_CSS스타일링_이력서디자인완성` |
-| 55 | Javascript 1일차 | 콘솔 사칙연산 계산기 | `55_JS기초_콘솔사칙연산계산기` |
-| 56 | Javascript 2일차 | 버튼 계산기 (DOM · 이벤트) | `56_JS_DOM_버튼계산기` |
-| 57 | Javascript 3일차 | 암호화폐 가격 추적기 (비동기) | `57_JS비동기_암호화폐가격추적기` |
+| 52 | HTML/CSS 1일차 | 내 이력서 만들기 (단일 파일) | `52-html-resume-basics` |
+| 53 | HTML/CSS 2일차 | 이력서 전송 폼 추가 | `53-html-form-resume-send` |
+| 54 | HTML/CSS 3일차 | 외부 CSS 분리 · 반응형 · 인쇄 | `54-css-resume-design` |
+| 55 | Javascript 1일차 | 콘솔 사칙연산 계산기 | `55-js-console-calculator` |
+| 56 | Javascript 2일차 | 버튼 계산기 (DOM · 이벤트) | `56-js-dom-button-calculator` |
+| 57 | Javascript 3일차 | 암호화폐 가격 추적기 (비동기) | `57-js-async-crypto-tracker` |
 
 이력서 3종은 모던 포트폴리오 형식(sticky 내비 · 히어로 프로필 카드 · 타임라인 · 카드 그리드)으로 통일했고,
 단계마다 배우는 내용이 드러나게 구성했다.
@@ -26,11 +26,11 @@
 
 | 챌린지 | 강의 | 주제 | 폴더 |
 | --- | --- | --- | --- |
-| 66 | Docker 1일차 | Docker 기초 · build & run · Compose | `66_Docker기초_빌드와컴포즈` |
-| 67 | Docker 2일차 | volume · MySQL · Redis · worker · **동시성 제어** | `67_Docker볼륨_MySQL_Redis_워커연동` |
-| 68 | Docker 3일차 | Docker 전반 정리 · **멀티스테이지 빌드** · 모델 서빙 | `68_Docker종합_FastAPI_Redis_모델서빙` |
-| 69 | Docker 4일차 | 당뇨 · 고혈압 위험도 예측 서비스 (모델 · API · UI) | `69_당뇨고혈압위험도예측_모델과API` |
-| 70 | Docker 5일차 | 같은 서비스의 **배포 완성** (Nginx · CI · 관측성) | `70_당뇨고혈압위험도예측_도커배포완성` |
+| 66 | Docker 1일차 | Docker 기초 · build & run · Compose | `66-docker-basics-build-compose` |
+| 67 | Docker 2일차 | volume · MySQL · Redis · worker · **동시성 제어** | `67-docker-volume-mysql-redis-worker` |
+| 68 | Docker 3일차 | Docker 전반 정리 · **멀티스테이지 빌드** · 모델 서빙 | `68-docker-multistage-model-serving` |
+| 69 | Docker 4일차 | 당뇨 · 고혈압 위험도 예측 서비스 (모델 · API · UI) | `69-health-risk-model-api` |
+| 70 | Docker 5일차 | 같은 서비스의 **배포 완성** (Nginx · CI · 관측성) | `70-health-risk-deploy` |
 
 ## 실행 방법
 
@@ -45,21 +45,21 @@
 
 ```bash
 # 66
-cd 66_Docker기초_빌드와컴포즈 && docker compose up -d --build
+cd 66-docker-basics-build-compose && docker compose up -d --build
 
 # 67 (동시성 테스트 포함)
-cd 67_Docker볼륨_MySQL_Redis_워커연동
+cd 67-docker-volume-mysql-redis-worker
 cp .env.example .env && docker compose up -d --build
 python load_test.py 50
 
 # 68
-cd 68_Docker종합_FastAPI_Redis_모델서빙 && docker compose up -d --build
+cd 68-docker-multistage-model-serving && docker compose up -d --build
 
 # 69
-cd 69_당뇨고혈압위험도예측_모델과API && docker compose up -d --build   # → localhost:8000
+cd 69-health-risk-model-api && docker compose up -d --build   # → localhost:8000
 
 # 70 (운영 구성)
-cd 70_당뇨고혈압위험도예측_도커배포완성
+cd 70-health-risk-deploy
 cp .env.example .env
 docker compose -f docker-compose.yml -f docker-compose.prod.yml up -d --build   # → localhost
 ```

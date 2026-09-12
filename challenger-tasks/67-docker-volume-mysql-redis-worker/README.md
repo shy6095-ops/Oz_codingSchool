@@ -209,7 +209,7 @@ curl localhost:8000/notifications
 ## 파일 구성
 
 ```
-67_Docker볼륨_MySQL_Redis_워커연동/
+67-docker-volume-mysql-redis-worker/
 ├── app/
 │   ├── main.py          # 예약 API, 3가지 락 전략 분기
 │   ├── config.py        # 환경변수

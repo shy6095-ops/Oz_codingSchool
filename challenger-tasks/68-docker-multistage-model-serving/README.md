@@ -222,7 +222,7 @@ docker compose logs -f worker
 ## 파일 구성
 
 ```
-68_Docker종합_FastAPI_Redis_모델서빙/
+68-docker-multistage-model-serving/
 ├── train/train.py       # 표준 라이브러리 로지스틱 회귀 학습
 ├── model/model.json     # 학습 산출물 (계수 + 표준화 기준 + 성능)
 ├── app/
